@@ -1,5 +1,7 @@
 # Mentor Connect
 
+**Live:** https://mentor-connect-beryl-one.vercel.app · **Repo:** https://github.com/Aniket9rana/mentor-connect · Admin: `/admin` (after signing in, Admin tools → *Load demo data*).
+
 A working prototype for the Mesa assignment: a student describes a career problem to an assistant, gets pointed to mentors **from the 50-mentor sheet only**, books a call (which happens outside the app), and receives a grounded write-up afterwards. The Mesa team gets a dashboard.
 
 - Design note (decisions, non-decisions, assumptions): [docs/DESIGN_NOTE.md](docs/DESIGN_NOTE.md)

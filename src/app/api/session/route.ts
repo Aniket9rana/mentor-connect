@@ -11,11 +11,13 @@ export async function POST(req: Request) {
   const p = In.safeParse(await body(req));
   if (!p.success) return fail("Please enter your name and a valid email.");
   const { name, email, tz } = p.data;
+  // *.test addresses are reserved for tests/demos: label them so analytics can exclude them and admins can remove them
+  const demo = email.endsWith(".test") ? 1 : 0;
   let s = await one<{ id: string }>("SELECT id FROM students WHERE email = ?", [email]);
-  if (s) await run("UPDATE students SET name = ?, tz = COALESCE(?, tz) WHERE id = ?", [name, tz ?? null, s.id]);
+  if (s) await run("UPDATE students SET name = ?, tz = COALESCE(?, tz), is_demo = MAX(is_demo, ?) WHERE id = ?", [name, tz ?? null, demo, s.id]);
   else {
     s = { id: uid("stu") };
-    await run("INSERT INTO students (id, name, email, tz, created_at) VALUES (?,?,?,?,?)", [s.id, name, email, tz ?? null, now()]);
+    await run("INSERT INTO students (id, name, email, tz, is_demo, created_at) VALUES (?,?,?,?,?,?)", [s.id, name, email, tz ?? null, demo, now()]);
   }
   (await cookies()).set("mc_student", sign(s.id), COOKIE_OPTS);
   return json({ ok: true });

@@ -24,6 +24,6 @@ Stack: Next.js 16 (App Router; params/searchParams are Promises) · TypeScript �
 - `.env.local` holds a real gateway key (copied from the kuku-jarvis project at the user's instruction): never commit, never print.
 
 ## Known gaps / next
-- Not deployed yet (needs Turso + Vercel env, see README). No git commit made yet.
+- Deployed: https://mentor-connect-beryl-one.vercel.app (Vercel, functions pinned to bom1 next to the Turso DB in ap-south-1; env vars set in the Vercel dashboard). Pushes to `main` auto-deploy. The deployed LLM key is the Kuku gateway key - replace with a dedicated key.
 - No streaming (5–20s replies), in-memory rate limit, no real auth, no Calendar OAuth/transcription capture, availability is seeded, no mobile polish pass.
 - Screen recording and PDF/one-page note formatting still to do by the user.
