@@ -32,7 +32,7 @@ The database is a local SQLite file (`data/app.db`), created and seeded with the
 
 ## Deploy (Vercel)
 1. Create a Turso database (`turso db create mentor-connect`) and set `TURSO_DATABASE_URL` + `TURSO_AUTH_TOKEN`. Without it the app falls back to an ephemeral `/tmp` database on Vercel.
-2. Set `LITELLM_API_KEY` (+ `LITELLM_BASE_URL`/`LLM_MODEL` if using a different gateway), `SESSION_SECRET`, `ADMIN_PASSWORD`, `APP_URL` (the deployed URL), optionally `RESEND_API_KEY` / `EMAIL_FROM`, `CRON_SECRET`.
+2. Set `LITELLM_API_KEY` (+ `LITELLM_BASE_URL`/`LLM_MODEL` if using a different gateway), `SESSION_SECRET`, `ADMIN_PASSWORD`, optionally `APP_URL` (not needed on Vercel), optionally `RESEND_API_KEY` / `EMAIL_FROM`, `CRON_SECRET`.
 3. `vercel.json` schedules the daily job (auto-release of unreviewed write-ups after 48h, action-item nudges).
 
 ## How it is built

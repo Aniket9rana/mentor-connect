@@ -1,6 +1,8 @@
 import { run, uid, now } from "./db";
 
-export const appUrl = () => (process.env.APP_URL ?? "http://localhost:3000").replace(/\/+$/, "");
+// APP_URL wins; on Vercel the production URL is provided automatically, so no manual step is needed there.
+export const appUrl = () =>
+  (process.env.APP_URL ?? (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : "http://localhost:3000")).replace(/\/+$/, "");
 
 /**
  * Every email is written to the in-app outbox first (source of truth for the demo and for audit).
