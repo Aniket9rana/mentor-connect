@@ -2,7 +2,13 @@ import { cookies } from "next/headers";
 import { createHmac, timingSafeEqual } from "node:crypto";
 import { one } from "./db";
 
-const secret = () => process.env.SESSION_SECRET ?? "dev-only-secret";
+const secret = () => {
+  const s = process.env.SESSION_SECRET;
+  if (s) return s;
+  // never sign cookies with a known default in production: anyone could forge a session
+  if (process.env.NODE_ENV === "production") throw new Error("SESSION_SECRET is not set");
+  return "dev-only-secret";
+};
 const mac = (v: string) => createHmac("sha256", secret()).update(v).digest("base64url");
 export const sign = (v: string) => `${v}.${mac(v)}`;
 export function unsign(s: string | undefined): string | null {
