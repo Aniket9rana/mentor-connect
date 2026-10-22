@@ -1,0 +1,1776 @@
+{
+  "source": "Mentor_Sample_50_Anonymised - Mentors.csv",
+  "ingestedAt": "2026-10-22",
+  "report": {
+    "rowsRead": 52,
+    "uniqueMentors": 50,
+    "duplicateRowsMerged": [
+      {
+        "id": "M023",
+        "identical": true
+      },
+      {
+        "id": "M013",
+        "identical": true
+      }
+    ],
+    "droppedColumns": [
+      "Contact",
+      "Email",
+      "LinkedIn (placeholders)",
+      "Company (anonymised label)"
+    ],
+    "profileStrength": {
+      "rich": 13,
+      "partial": 33,
+      "thin": [
+        "M020",
+        "M029",
+        "M037",
+        "M039"
+      ]
+    },
+    "fieldCoverage": {
+      "seniority": 22,
+      "sectors": 45,
+      "roles": 34,
+      "aiKnown": 37,
+      "mentorshipQuality": 13
+    }
+  },
+  "mentors": [
+    {
+      "id": "M001",
+      "name": "Mentor 001",
+      "domains": [
+        "Business Generalist"
+      ],
+      "masterSector": "Edtech",
+      "sectors": [
+        "Edtech",
+        "Logistics"
+      ],
+      "roles": [
+        "Sales / CSM / Partnerships",
+        "Business Generalist (Founder's Office / Strategy & Ops)"
+      ],
+      "seniority": "Senior",
+      "aiNative": null,
+      "builtAiProduct": true,
+      "aiSubDomain": null,
+      "aiTools": [],
+      "tools": [
+        "Excel"
+      ],
+      "mentorshipQuality": null,
+      "activities": 1,
+      "city": "Bengaluru",
+      "utcOffsetMin": 330,
+      "profile": "rich",
+      "missing": [
+        "mentorship quality"
+      ]
+    },
+    {
+      "id": "M002",
+      "name": "Mentor 002",
+      "domains": [
+        "Product Management"
+      ],
+      "masterSector": "SaaS",
+      "sectors": [
+        "Quick commerce",
+        "Healthtech",
+        "SaaS"
+      ],
+      "roles": [
+        "Product Management"
+      ],
+      "seniority": null,
+      "aiNative": null,
+      "builtAiProduct": true,
+      "aiSubDomain": null,
+      "aiTools": [],
+      "tools": [
+        "Tableau",
+        "Google Analytics",
+        "Jira",
+        "Excel",
+        "Mixpanel"
+      ],
+      "mentorshipQuality": null,
+      "activities": 0,
+      "city": "Bengaluru",
+      "utcOffsetMin": 330,
+      "profile": "partial",
+      "missing": [
+        "seniority",
+        "mentorship quality"
+      ]
+    },
+    {
+      "id": "M003",
+      "name": "Mentor 003",
+      "domains": [
+        "B2B Sales & Partnerships"
+      ],
+      "masterSector": "SaaS",
+      "sectors": [
+        "Quick commerce",
+        "E-commerce",
+        "SaaS",
+        "D2C"
+      ],
+      "roles": [
+        "Marketing",
+        "Sales / CSM / Partnerships",
+        "Business Generalist (Founder's Office / Strategy & Ops)"
+      ],
+      "seniority": null,
+      "aiNative": null,
+      "builtAiProduct": true,
+      "aiSubDomain": null,
+      "aiTools": [],
+      "tools": [
+        "Tableau",
+        "HubSpot",
+        "Google Analytics",
+        "Excel"
+      ],
+      "mentorshipQuality": null,
+      "activities": 1,
+      "city": "Bengaluru",
+      "utcOffsetMin": 330,
+      "profile": "partial",
+      "missing": [
+        "seniority",
+        "mentorship quality"
+      ]
+    },
+    {
+      "id": "M004",
+      "name": "Mentor 004",
+      "domains": [
+        "Business Generalist"
+      ],
+      "masterSector": "SaaS",
+      "sectors": [
+        "SaaS",
+        "Deeptech/AI"
+      ],
+      "roles": [
+        "Marketing",
+        "Sales / CSM / Partnerships",
+        "AI & Analytics",
+        "Growth",
+        "Business Generalist (Founder's Office / Strategy & Ops)"
+      ],
+      "seniority": null,
+      "aiNative": null,
+      "builtAiProduct": true,
+      "aiSubDomain": null,
+      "aiTools": [
+        "n8n",
+        "Zapier"
+      ],
+      "tools": [
+        "HubSpot",
+        "Excel"
+      ],
+      "mentorshipQuality": null,
+      "activities": 0,
+      "city": "Delhi",
+      "utcOffsetMin": 330,
+      "profile": "partial",
+      "missing": [
+        "seniority",
+        "mentorship quality"
+      ]
+    },
+    {
+      "id": "M005",
+      "name": "Mentor 005",
+      "domains": [
+        "Business Generalist"
+      ],
+      "masterSector": "Accounting",
+      "sectors": [
+        "Quick commerce",
+        "E-commerce",
+        "Fintech",
+        "Healthtech",
+        "SaaS",
+        "D2C",
+        "Climate tech",
+        "Agritech"
+      ],
+      "roles": [
+        "Product Management",
+        "Venture Capital",
+        "Growth",
+        "Business Generalist (Founder's Office / Strategy & Ops)"
+      ],
+      "seniority": null,
+      "aiNative": null,
+      "builtAiProduct": true,
+      "aiSubDomain": null,
+      "aiTools": [],
+      "tools": [
+        "Excel"
+      ],
+      "mentorshipQuality": null,
+      "activities": 0,
+      "city": "Bengaluru",
+      "utcOffsetMin": 330,
+      "profile": "partial",
+      "missing": [
+        "seniority",
+        "mentorship quality"
+      ]
+    },
+    {
+      "id": "M006",
+      "name": "Mentor 006",
+      "domains": [
+        "Marketing"
+      ],
+      "masterSector": "Edtech",
+      "sectors": [
+        "Edtech",
+        "Sports tech"
+      ],
+      "roles": [],
+      "seniority": "Mid-career",
+      "aiNative": null,
+      "builtAiProduct": null,
+      "aiSubDomain": null,
+      "aiTools": [],
+      "tools": [],
+      "mentorshipQuality": "Good",
+      "activities": 3,
+      "city": "Bengaluru",
+      "utcOffsetMin": 330,
+      "profile": "partial",
+      "missing": [
+        "roles",
+        "AI experience"
+      ]
+    },
+    {
+      "id": "M007",
+      "name": "Mentor 007",
+      "domains": [
+        "Business Generalist"
+      ],
+      "masterSector": null,
+      "sectors": [
+        "Fintech",
+        "Healthtech",
+        "Edtech"
+      ],
+      "roles": [
+        "Venture Capital",
+        "Business Generalist (Founder's Office / Strategy & Ops)"
+      ],
+      "seniority": "Mid-career",
+      "aiNative": null,
+      "builtAiProduct": false,
+      "aiSubDomain": null,
+      "aiTools": [],
+      "tools": [
+        "Excel"
+      ],
+      "mentorshipQuality": null,
+      "activities": 2,
+      "city": "Delhi",
+      "utcOffsetMin": 330,
+      "profile": "rich",
+      "missing": [
+        "mentorship quality"
+      ]
+    },
+    {
+      "id": "M008",
+      "name": "Mentor 008",
+      "domains": [
+        "B2B Sales & Partnerships"
+      ],
+      "masterSector": "Quick commerce",
+      "sectors": [
+        "Quick commerce",
+        "E-commerce",
+        "Fintech",
+        "Healthtech",
+        "SaaS",
+        "D2C"
+      ],
+      "roles": [
+        "Sales / CSM / Partnerships",
+        "Business Generalist (Founder's Office / Strategy & Ops)"
+      ],
+      "seniority": "Senior",
+      "aiNative": null,
+      "builtAiProduct": true,
+      "aiSubDomain": null,
+      "aiTools": [],
+      "tools": [
+        "Tableau",
+        "HubSpot"
+      ],
+      "mentorshipQuality": null,
+      "activities": 1,
+      "city": "Bengaluru",
+      "utcOffsetMin": 330,
+      "profile": "rich",
+      "missing": [
+        "mentorship quality"
+      ]
+    },
+    {
+      "id": "M009",
+      "name": "Mentor 009",
+      "domains": [
+        "Business Generalist"
+      ],
+      "masterSector": "Fintech",
+      "sectors": [
+        "Fintech",
+        "Logistics",
+        "Edtech"
+      ],
+      "roles": [
+        "Growth",
+        "Business Generalist (Founder's Office / Strategy & Ops)"
+      ],
+      "seniority": "Mid-career",
+      "aiNative": null,
+      "builtAiProduct": false,
+      "aiSubDomain": null,
+      "aiTools": [
+        "n8n",
+        "Zapier"
+      ],
+      "tools": [
+        "Tableau",
+        "HubSpot",
+        "Excel"
+      ],
+      "mentorshipQuality": "Excellent",
+      "activities": 8,
+      "city": "Bengaluru",
+      "utcOffsetMin": 330,
+      "profile": "rich",
+      "missing": []
+    },
+    {
+      "id": "M010",
+      "name": "Mentor 010",
+      "domains": [
+        "Marketing"
+      ],
+      "masterSector": "Edtech",
+      "sectors": [
+        "HR tech",
+        "Edtech",
+        "Consulting"
+      ],
+      "roles": [],
+      "seniority": "Senior",
+      "aiNative": null,
+      "builtAiProduct": null,
+      "aiSubDomain": null,
+      "aiTools": [],
+      "tools": [],
+      "mentorshipQuality": "Good",
+      "activities": 7,
+      "city": "Bengaluru",
+      "utcOffsetMin": 330,
+      "profile": "partial",
+      "missing": [
+        "roles",
+        "AI experience"
+      ]
+    },
+    {
+      "id": "M011",
+      "name": "Mentor 011",
+      "domains": [
+        "Marketing"
+      ],
+      "masterSector": "Tech, info & internet",
+      "sectors": [
+        "IT",
+        "E-commerce",
+        "Quick commerce",
+        "Edtech"
+      ],
+      "roles": [],
+      "seniority": "Mid-career",
+      "aiNative": null,
+      "builtAiProduct": null,
+      "aiSubDomain": null,
+      "aiTools": [],
+      "tools": [],
+      "mentorshipQuality": "Excellent",
+      "activities": null,
+      "city": "Gurugram",
+      "utcOffsetMin": 330,
+      "profile": "partial",
+      "missing": [
+        "roles",
+        "AI experience"
+      ]
+    },
+    {
+      "id": "M012",
+      "name": "Mentor 012",
+      "domains": [
+        "Product Management"
+      ],
+      "masterSector": "Retail",
+      "sectors": [
+        "Retail",
+        "Quick commerce",
+        "E-commerce",
+        "IT",
+        "Consulting"
+      ],
+      "roles": [],
+      "seniority": "Mid-career",
+      "aiNative": null,
+      "builtAiProduct": null,
+      "aiSubDomain": null,
+      "aiTools": [],
+      "tools": [],
+      "mentorshipQuality": "Good",
+      "activities": 2,
+      "city": "Bengaluru",
+      "utcOffsetMin": 330,
+      "profile": "partial",
+      "missing": [
+        "roles",
+        "AI experience"
+      ]
+    },
+    {
+      "id": "M013",
+      "name": "Mentor 013",
+      "domains": [
+        "Product Management"
+      ],
+      "masterSector": "SaaS",
+      "sectors": [
+        "E-commerce",
+        "SaaS",
+        "Edtech",
+        "Deeptech/AI"
+      ],
+      "roles": [],
+      "seniority": null,
+      "aiNative": null,
+      "builtAiProduct": true,
+      "aiSubDomain": null,
+      "aiTools": [
+        "n8n",
+        "Make",
+        "Zapier"
+      ],
+      "tools": [
+        "HubSpot",
+        "Google Analytics",
+        "Jira"
+      ],
+      "mentorshipQuality": null,
+      "activities": 0,
+      "city": "Mumbai",
+      "utcOffsetMin": 330,
+      "profile": "partial",
+      "missing": [
+        "roles",
+        "seniority",
+        "mentorship quality"
+      ]
+    },
+    {
+      "id": "M014",
+      "name": "Mentor 014",
+      "domains": [
+        "Product Management"
+      ],
+      "masterSector": "Gaming",
+      "sectors": [
+        "Media",
+        "Edtech",
+        "Gaming"
+      ],
+      "roles": [
+        "Product Management"
+      ],
+      "seniority": "Mid-career",
+      "aiNative": null,
+      "builtAiProduct": true,
+      "aiSubDomain": null,
+      "aiTools": [
+        "n8n"
+      ],
+      "tools": [
+        "Tableau"
+      ],
+      "mentorshipQuality": "Excellent",
+      "activities": 3,
+      "city": "Bengaluru",
+      "utcOffsetMin": 330,
+      "profile": "rich",
+      "missing": []
+    },
+    {
+      "id": "M015",
+      "name": "Mentor 015",
+      "domains": [
+        "Product Management"
+      ],
+      "masterSector": null,
+      "sectors": [
+        "SaaS"
+      ],
+      "roles": [
+        "Marketing"
+      ],
+      "seniority": null,
+      "aiNative": null,
+      "builtAiProduct": true,
+      "aiSubDomain": null,
+      "aiTools": [],
+      "tools": [
+        "HubSpot",
+        "Google Analytics",
+        "Mixpanel"
+      ],
+      "mentorshipQuality": null,
+      "activities": null,
+      "city": "Bengaluru",
+      "utcOffsetMin": 330,
+      "profile": "partial",
+      "missing": [
+        "seniority",
+        "mentorship quality"
+      ]
+    },
+    {
+      "id": "M016",
+      "name": "Mentor 016",
+      "domains": [
+        "B2B Sales & Partnerships"
+      ],
+      "masterSector": "Quick commerce",
+      "sectors": [
+        "Quick commerce",
+        "E-commerce",
+        "SaaS",
+        "D2C",
+        "Logistics"
+      ],
+      "roles": [
+        "Product Management",
+        "Sales / CSM / Partnerships",
+        "Growth",
+        "Business Generalist (Founder's Office / Strategy & Ops)"
+      ],
+      "seniority": null,
+      "aiNative": null,
+      "builtAiProduct": true,
+      "aiSubDomain": null,
+      "aiTools": [
+        "n8n",
+        "Zapier"
+      ],
+      "tools": [
+        "Excel"
+      ],
+      "mentorshipQuality": null,
+      "activities": 0,
+      "city": "Gurugram",
+      "utcOffsetMin": 330,
+      "profile": "partial",
+      "missing": [
+        "seniority",
+        "mentorship quality"
+      ]
+    },
+    {
+      "id": "M017",
+      "name": "Mentor 017",
+      "domains": [
+        "B2B Sales & Partnerships"
+      ],
+      "masterSector": "AI",
+      "sectors": [
+        "Taxation",
+        "Insurance",
+        "Employee benefits",
+        "Manufacturing",
+        "AI"
+      ],
+      "roles": [
+        "Sales / CSM / Partnerships"
+      ],
+      "seniority": "Senior",
+      "aiNative": true,
+      "builtAiProduct": true,
+      "aiSubDomain": null,
+      "aiTools": [],
+      "tools": [
+        "HubSpot"
+      ],
+      "mentorshipQuality": "Good",
+      "activities": 7,
+      "city": "Bengaluru",
+      "utcOffsetMin": 330,
+      "profile": "rich",
+      "missing": []
+    },
+    {
+      "id": "M018",
+      "name": "Mentor 018",
+      "domains": [
+        "B2B Sales & Partnerships"
+      ],
+      "masterSector": "SaaS",
+      "sectors": [
+        "SaaS"
+      ],
+      "roles": [
+        "Sales / CSM / Partnerships"
+      ],
+      "seniority": null,
+      "aiNative": null,
+      "builtAiProduct": false,
+      "aiSubDomain": null,
+      "aiTools": [],
+      "tools": [
+        "Tableau",
+        "Jira"
+      ],
+      "mentorshipQuality": null,
+      "activities": 1,
+      "city": "Bengaluru",
+      "utcOffsetMin": 330,
+      "profile": "partial",
+      "missing": [
+        "seniority",
+        "mentorship quality"
+      ]
+    },
+    {
+      "id": "M019",
+      "name": "Mentor 019",
+      "domains": [
+        "B2B Sales & Partnerships"
+      ],
+      "masterSector": "HR tech",
+      "sectors": [],
+      "roles": [
+        "Product Management",
+        "Sales / CSM / Partnerships",
+        "AI & Analytics",
+        "Business Generalist (Founder's Office / Strategy & Ops)"
+      ],
+      "seniority": null,
+      "aiNative": null,
+      "builtAiProduct": true,
+      "aiSubDomain": null,
+      "aiTools": [],
+      "tools": [
+        "Excel",
+        "Mixpanel"
+      ],
+      "mentorshipQuality": null,
+      "activities": 0,
+      "city": "Bengaluru",
+      "utcOffsetMin": 330,
+      "profile": "partial",
+      "missing": [
+        "sectors",
+        "seniority",
+        "mentorship quality"
+      ]
+    },
+    {
+      "id": "M020",
+      "name": "Mentor 020",
+      "domains": [
+        "Behavioural"
+      ],
+      "masterSector": "Manufacturing",
+      "sectors": [],
+      "roles": [],
+      "seniority": null,
+      "aiNative": null,
+      "builtAiProduct": null,
+      "aiSubDomain": null,
+      "aiTools": [],
+      "tools": [],
+      "mentorshipQuality": null,
+      "activities": 0,
+      "city": "Mumbai",
+      "utcOffsetMin": 330,
+      "profile": "thin",
+      "missing": [
+        "sectors",
+        "roles",
+        "seniority",
+        "AI experience",
+        "mentorship quality"
+      ]
+    },
+    {
+      "id": "M021",
+      "name": "Mentor 021",
+      "domains": [
+        "Product Management"
+      ],
+      "masterSector": "E-commerce",
+      "sectors": [
+        "Quick commerce",
+        "E-commerce",
+        "Fintech",
+        "SaaS",
+        "Edtech",
+        "Deeptech/AI"
+      ],
+      "roles": [
+        "Product Management",
+        "AI & Analytics"
+      ],
+      "seniority": null,
+      "aiNative": null,
+      "builtAiProduct": true,
+      "aiSubDomain": null,
+      "aiTools": [
+        "n8n",
+        "Make"
+      ],
+      "tools": [
+        "Google Analytics",
+        "Jira",
+        "Mixpanel"
+      ],
+      "mentorshipQuality": null,
+      "activities": 1,
+      "city": "Bengaluru",
+      "utcOffsetMin": 330,
+      "profile": "partial",
+      "missing": [
+        "seniority",
+        "mentorship quality"
+      ]
+    },
+    {
+      "id": "M022",
+      "name": "Mentor 022",
+      "domains": [
+        "Marketing"
+      ],
+      "masterSector": "Freelance",
+      "sectors": [
+        "Travel tech",
+        "Fintech",
+        "IT",
+        "Food & beverages",
+        "Healthtech"
+      ],
+      "roles": [],
+      "seniority": null,
+      "aiNative": null,
+      "builtAiProduct": null,
+      "aiSubDomain": null,
+      "aiTools": [],
+      "tools": [],
+      "mentorshipQuality": null,
+      "activities": 0,
+      "city": "Bengaluru",
+      "utcOffsetMin": 330,
+      "profile": "partial",
+      "missing": [
+        "roles",
+        "seniority",
+        "AI experience",
+        "mentorship quality"
+      ]
+    },
+    {
+      "id": "M023",
+      "name": "Mentor 023",
+      "domains": [
+        "Growth"
+      ],
+      "masterSector": "Fintech",
+      "sectors": [
+        "Quick commerce",
+        "E-commerce",
+        "Fintech",
+        "D2C"
+      ],
+      "roles": [],
+      "seniority": null,
+      "aiNative": null,
+      "builtAiProduct": true,
+      "aiSubDomain": null,
+      "aiTools": [
+        "n8n",
+        "Zapier"
+      ],
+      "tools": [
+        "HubSpot",
+        "Google Analytics",
+        "Jira",
+        "Excel",
+        "Mixpanel"
+      ],
+      "mentorshipQuality": null,
+      "activities": 0,
+      "city": "Bengaluru",
+      "utcOffsetMin": 330,
+      "profile": "partial",
+      "missing": [
+        "roles",
+        "seniority",
+        "mentorship quality"
+      ]
+    },
+    {
+      "id": "M024",
+      "name": "Mentor 024",
+      "domains": [
+        "Behavioural"
+      ],
+      "masterSector": "IT",
+      "sectors": [
+        "SaaS"
+      ],
+      "roles": [
+        "Sales / CSM / Partnerships",
+        "Business Generalist (Founder's Office / Strategy & Ops)"
+      ],
+      "seniority": null,
+      "aiNative": null,
+      "builtAiProduct": true,
+      "aiSubDomain": null,
+      "aiTools": [
+        "n8n"
+      ],
+      "tools": [
+        "HubSpot"
+      ],
+      "mentorshipQuality": null,
+      "activities": 0,
+      "city": "Bengaluru",
+      "utcOffsetMin": 330,
+      "profile": "partial",
+      "missing": [
+        "seniority",
+        "mentorship quality"
+      ]
+    },
+    {
+      "id": "M025",
+      "name": "Mentor 025",
+      "domains": [
+        "Business Generalist"
+      ],
+      "masterSector": "E-commerce",
+      "sectors": [
+        "E-commerce",
+        "Climate tech",
+        "Deeptech/AI",
+        "Logistics"
+      ],
+      "roles": [
+        "Product Management",
+        "Business Generalist (Founder's Office / Strategy & Ops)"
+      ],
+      "seniority": "Mid-career",
+      "aiNative": null,
+      "builtAiProduct": true,
+      "aiSubDomain": null,
+      "aiTools": [
+        "Zapier"
+      ],
+      "tools": [
+        "Jira"
+      ],
+      "mentorshipQuality": "Good",
+      "activities": 1,
+      "city": "Bengaluru",
+      "utcOffsetMin": 330,
+      "profile": "rich",
+      "missing": []
+    },
+    {
+      "id": "M026",
+      "name": "Mentor 026",
+      "domains": [
+        "Business Generalist"
+      ],
+      "masterSector": null,
+      "sectors": [
+        "Healthtech",
+        "SaaS",
+        "Edtech"
+      ],
+      "roles": [
+        "Growth",
+        "Category Management",
+        "Business Generalist (Founder's Office / Strategy & Ops)"
+      ],
+      "seniority": null,
+      "aiNative": null,
+      "builtAiProduct": false,
+      "aiSubDomain": null,
+      "aiTools": [],
+      "tools": [
+        "Tableau",
+        "Excel"
+      ],
+      "mentorshipQuality": null,
+      "activities": 0,
+      "city": "Bengaluru",
+      "utcOffsetMin": 330,
+      "profile": "partial",
+      "missing": [
+        "seniority",
+        "mentorship quality"
+      ]
+    },
+    {
+      "id": "M027",
+      "name": "Mentor 027",
+      "domains": [
+        "Marketing"
+      ],
+      "masterSector": "SaaS",
+      "sectors": [
+        "B2B",
+        "SaaS",
+        "E-commerce"
+      ],
+      "roles": [
+        "Product Marketing",
+        "CMO Marketing Manager",
+        "Content Marketing",
+        "Performance Marketing"
+      ],
+      "seniority": "Mid-career",
+      "aiNative": null,
+      "builtAiProduct": true,
+      "aiSubDomain": null,
+      "aiTools": [
+        "HubSpot",
+        "Factors.ai",
+        "Google Ads",
+        "LinkedIn ads"
+      ],
+      "tools": [],
+      "mentorshipQuality": null,
+      "activities": 1,
+      "city": "Bengaluru",
+      "utcOffsetMin": 330,
+      "profile": "rich",
+      "missing": [
+        "mentorship quality"
+      ]
+    },
+    {
+      "id": "M028",
+      "name": "Mentor 028",
+      "domains": [
+        "B2B Sales & Partnerships"
+      ],
+      "masterSector": "D2C",
+      "sectors": [
+        "Fintech",
+        "D2C",
+        "Edtech"
+      ],
+      "roles": [
+        "Marketing",
+        "Sales / CSM / Partnerships",
+        "Growth",
+        "Business Generalist (Founder's Office / Strategy & Ops)"
+      ],
+      "seniority": null,
+      "aiNative": null,
+      "builtAiProduct": true,
+      "aiSubDomain": null,
+      "aiTools": [],
+      "tools": [
+        "Tableau",
+        "HubSpot",
+        "Google Analytics",
+        "Excel"
+      ],
+      "mentorshipQuality": null,
+      "activities": 0,
+      "city": "Pune",
+      "utcOffsetMin": 330,
+      "profile": "partial",
+      "missing": [
+        "seniority",
+        "mentorship quality"
+      ]
+    },
+    {
+      "id": "M029",
+      "name": "Mentor 029",
+      "domains": [
+        "Data"
+      ],
+      "masterSector": "Mobility",
+      "sectors": [],
+      "roles": [],
+      "seniority": null,
+      "aiNative": null,
+      "builtAiProduct": null,
+      "aiSubDomain": null,
+      "aiTools": [],
+      "tools": [],
+      "mentorshipQuality": null,
+      "activities": 0,
+      "city": "Bengaluru",
+      "utcOffsetMin": 330,
+      "profile": "thin",
+      "missing": [
+        "sectors",
+        "roles",
+        "seniority",
+        "AI experience",
+        "mentorship quality"
+      ]
+    },
+    {
+      "id": "M030",
+      "name": "Mentor 030",
+      "domains": [
+        "Marketing"
+      ],
+      "masterSector": "IT",
+      "sectors": [
+        "E-commerce",
+        "Edtech",
+        "Media"
+      ],
+      "roles": [
+        "Business Generalist (Founder's Office / Strategy & Ops)",
+        "Brand management",
+        "Digital Marketing",
+        "AI"
+      ],
+      "seniority": "Mid-career",
+      "aiNative": null,
+      "builtAiProduct": true,
+      "aiSubDomain": null,
+      "aiTools": [
+        "Zapier",
+        "n8n",
+        "Make"
+      ],
+      "tools": [],
+      "mentorshipQuality": "Excellent",
+      "activities": 3,
+      "city": "Canada",
+      "utcOffsetMin": -300,
+      "profile": "rich",
+      "missing": []
+    },
+    {
+      "id": "M031",
+      "name": "Mentor 031",
+      "domains": [
+        "Business Generalist"
+      ],
+      "masterSector": "Quick commerce",
+      "sectors": [
+        "Quick commerce",
+        "E-commerce",
+        "Healthtech",
+        "D2C",
+        "Edtech",
+        "Logistics"
+      ],
+      "roles": [
+        "Sales / CSM / Partnerships",
+        "Growth",
+        "Business Generalist (Founder's Office / Strategy & Ops)"
+      ],
+      "seniority": null,
+      "aiNative": null,
+      "builtAiProduct": true,
+      "aiSubDomain": null,
+      "aiTools": [],
+      "tools": [
+        "Excel"
+      ],
+      "mentorshipQuality": null,
+      "activities": 0,
+      "city": "Bengaluru",
+      "utcOffsetMin": 330,
+      "profile": "partial",
+      "missing": [
+        "seniority",
+        "mentorship quality"
+      ]
+    },
+    {
+      "id": "M032",
+      "name": "Mentor 032",
+      "domains": [
+        "Venture Capital"
+      ],
+      "masterSector": "Venture capital",
+      "sectors": [
+        "Venture capital"
+      ],
+      "roles": [],
+      "seniority": "Senior",
+      "aiNative": null,
+      "builtAiProduct": null,
+      "aiSubDomain": null,
+      "aiTools": [],
+      "tools": [],
+      "mentorshipQuality": null,
+      "activities": null,
+      "city": "Bengaluru",
+      "utcOffsetMin": 330,
+      "profile": "partial",
+      "missing": [
+        "roles",
+        "AI experience",
+        "mentorship quality"
+      ]
+    },
+    {
+      "id": "M033",
+      "name": "Mentor 033",
+      "domains": [
+        "AI"
+      ],
+      "masterSector": "AI",
+      "sectors": [
+        "E-commerce",
+        "Healthtech",
+        "SaaS",
+        "Edtech"
+      ],
+      "roles": [
+        "Product Management",
+        "AI & Analytics",
+        "Business Generalist (Founder's Office / Strategy & Ops)"
+      ],
+      "seniority": null,
+      "aiNative": null,
+      "builtAiProduct": true,
+      "aiSubDomain": "AI Product",
+      "aiTools": [
+        "n8n",
+        "Langflow",
+        "Make"
+      ],
+      "tools": [
+        "Google Analytics",
+        "Jira",
+        "Excel",
+        "Mixpanel"
+      ],
+      "mentorshipQuality": null,
+      "activities": 0,
+      "city": "Bengaluru",
+      "utcOffsetMin": 330,
+      "profile": "partial",
+      "missing": [
+        "seniority",
+        "mentorship quality"
+      ]
+    },
+    {
+      "id": "M034",
+      "name": "Mentor 034",
+      "domains": [
+        "B2B Sales & Partnerships"
+      ],
+      "masterSector": "SaaS",
+      "sectors": [
+        "SaaS"
+      ],
+      "roles": [
+        "Sales / CSM / Partnerships"
+      ],
+      "seniority": null,
+      "aiNative": null,
+      "builtAiProduct": true,
+      "aiSubDomain": null,
+      "aiTools": [],
+      "tools": [],
+      "mentorshipQuality": null,
+      "activities": 0,
+      "city": "Bengaluru",
+      "utcOffsetMin": 330,
+      "profile": "partial",
+      "missing": [
+        "seniority",
+        "mentorship quality"
+      ]
+    },
+    {
+      "id": "M035",
+      "name": "Mentor 035",
+      "domains": [
+        "Product Management"
+      ],
+      "masterSector": "SaaS",
+      "sectors": [
+        "E-commerce",
+        "SaaS",
+        "D2C"
+      ],
+      "roles": [
+        "Product Management",
+        "AI & Analytics",
+        "Growth",
+        "Business Generalist (Founder's Office / Strategy & Ops)"
+      ],
+      "seniority": null,
+      "aiNative": null,
+      "builtAiProduct": true,
+      "aiSubDomain": null,
+      "aiTools": [
+        "n8n",
+        "Zapier"
+      ],
+      "tools": [
+        "Tableau",
+        "HubSpot",
+        "Google Analytics",
+        "Jira",
+        "Excel",
+        "Mixpanel"
+      ],
+      "mentorshipQuality": null,
+      "activities": 0,
+      "city": "Bengaluru",
+      "utcOffsetMin": 330,
+      "profile": "partial",
+      "missing": [
+        "seniority",
+        "mentorship quality"
+      ]
+    },
+    {
+      "id": "M036",
+      "name": "Mentor 036",
+      "domains": [
+        "Marketing"
+      ],
+      "masterSector": "D2C",
+      "sectors": [
+        "E-commerce",
+        "SaaS",
+        "D2C",
+        "Deeptech/AI"
+      ],
+      "roles": [
+        "Marketing",
+        "Sales / CSM / Partnerships",
+        "AI & Analytics"
+      ],
+      "seniority": null,
+      "aiNative": null,
+      "builtAiProduct": true,
+      "aiSubDomain": null,
+      "aiTools": [
+        "n8n"
+      ],
+      "tools": [],
+      "mentorshipQuality": null,
+      "activities": 0,
+      "city": "Bengaluru",
+      "utcOffsetMin": 330,
+      "profile": "partial",
+      "missing": [
+        "seniority",
+        "mentorship quality"
+      ]
+    },
+    {
+      "id": "M037",
+      "name": "Mentor 037",
+      "domains": [
+        "AI"
+      ],
+      "masterSector": "AI",
+      "sectors": [],
+      "roles": [],
+      "seniority": null,
+      "aiNative": null,
+      "builtAiProduct": null,
+      "aiSubDomain": "AI Product",
+      "aiTools": [],
+      "tools": [],
+      "mentorshipQuality": null,
+      "activities": 0,
+      "city": "Bengaluru",
+      "utcOffsetMin": 330,
+      "profile": "thin",
+      "missing": [
+        "sectors",
+        "roles",
+        "seniority",
+        "mentorship quality"
+      ]
+    },
+    {
+      "id": "M038",
+      "name": "Mentor 038",
+      "domains": [
+        "Business Generalist",
+        "Growth"
+      ],
+      "masterSector": "Quick commerce",
+      "sectors": [
+        "E-commerce",
+        "Quick commerce",
+        "Fintech",
+        "Healthtech",
+        "Consulting"
+      ],
+      "roles": [],
+      "seniority": "Mid-career",
+      "aiNative": null,
+      "builtAiProduct": null,
+      "aiSubDomain": null,
+      "aiTools": [],
+      "tools": [],
+      "mentorshipQuality": "Excellent",
+      "activities": 3,
+      "city": "Mumbai",
+      "utcOffsetMin": 330,
+      "profile": "partial",
+      "missing": [
+        "roles",
+        "AI experience"
+      ]
+    },
+    {
+      "id": "M039",
+      "name": "Mentor 039",
+      "domains": [
+        "Business Generalist"
+      ],
+      "masterSector": "Fintech",
+      "sectors": [],
+      "roles": [],
+      "seniority": "Mid-career",
+      "aiNative": null,
+      "builtAiProduct": null,
+      "aiSubDomain": null,
+      "aiTools": [],
+      "tools": [],
+      "mentorshipQuality": null,
+      "activities": 0,
+      "city": "Bengaluru",
+      "utcOffsetMin": 330,
+      "profile": "thin",
+      "missing": [
+        "sectors",
+        "roles",
+        "AI experience",
+        "mentorship quality"
+      ]
+    },
+    {
+      "id": "M040",
+      "name": "Mentor 040",
+      "domains": [
+        "Business Generalist"
+      ],
+      "masterSector": "Healthtech",
+      "sectors": [
+        "Healthtech",
+        "D2C"
+      ],
+      "roles": [
+        "Product Management",
+        "Venture Capital",
+        "Sales / CSM / Partnerships",
+        "AI & Analytics",
+        "Growth",
+        "Category Management",
+        "Business Generalist (Founder's Office / Strategy & Ops)"
+      ],
+      "seniority": null,
+      "aiNative": null,
+      "builtAiProduct": false,
+      "aiSubDomain": null,
+      "aiTools": [
+        "Make"
+      ],
+      "tools": [
+        "HubSpot",
+        "Google Analytics",
+        "Jira"
+      ],
+      "mentorshipQuality": null,
+      "activities": 0,
+      "city": null,
+      "utcOffsetMin": 330,
+      "profile": "partial",
+      "missing": [
+        "seniority",
+        "mentorship quality"
+      ]
+    },
+    {
+      "id": "M041",
+      "name": "Mentor 041",
+      "domains": [
+        "Marketing"
+      ],
+      "masterSector": "AI",
+      "sectors": [
+        "SaaS",
+        "Deeptech/AI"
+      ],
+      "roles": [],
+      "seniority": "Mid-career",
+      "aiNative": null,
+      "builtAiProduct": true,
+      "aiSubDomain": null,
+      "aiTools": [],
+      "tools": [
+        "Google Analytics",
+        "Jira",
+        "Mixpanel"
+      ],
+      "mentorshipQuality": "Excellent",
+      "activities": 2,
+      "city": "Bengaluru",
+      "utcOffsetMin": 330,
+      "profile": "rich",
+      "missing": [
+        "roles"
+      ]
+    },
+    {
+      "id": "M042",
+      "name": "Mentor 042",
+      "domains": [
+        "Marketing"
+      ],
+      "masterSector": "Edtech",
+      "sectors": [
+        "Edtech",
+        "HR tech",
+        "SaaS"
+      ],
+      "roles": [
+        "Brand Strategy",
+        "Marketing",
+        "Marketing Generalist"
+      ],
+      "seniority": "Mid-career",
+      "aiNative": null,
+      "builtAiProduct": true,
+      "aiSubDomain": null,
+      "aiTools": [
+        "n8n",
+        "Notion AI",
+        "Make",
+        "Vercel",
+        "Canva",
+        "Gamma"
+      ],
+      "tools": [],
+      "mentorshipQuality": null,
+      "activities": 2,
+      "city": "Bengaluru",
+      "utcOffsetMin": 330,
+      "profile": "rich",
+      "missing": [
+        "mentorship quality"
+      ]
+    },
+    {
+      "id": "M043",
+      "name": "Mentor 043",
+      "domains": [
+        "Business Generalist"
+      ],
+      "masterSector": "Quick commerce",
+      "sectors": [
+        "Quick commerce",
+        "D2C",
+        "Edtech"
+      ],
+      "roles": [
+        "Marketing",
+        "Sales / CSM / Partnerships",
+        "Growth",
+        "Category Management",
+        "Business Generalist (Founder's Office / Strategy & Ops)"
+      ],
+      "seniority": null,
+      "aiNative": null,
+      "builtAiProduct": true,
+      "aiSubDomain": null,
+      "aiTools": [],
+      "tools": [
+        "Google Analytics",
+        "Excel"
+      ],
+      "mentorshipQuality": null,
+      "activities": null,
+      "city": "Noida",
+      "utcOffsetMin": 330,
+      "profile": "partial",
+      "missing": [
+        "seniority",
+        "mentorship quality"
+      ]
+    },
+    {
+      "id": "M044",
+      "name": "Mentor 044",
+      "domains": [
+        "Business Generalist"
+      ],
+      "masterSector": "Healthtech",
+      "sectors": [
+        "Healthtech"
+      ],
+      "roles": [
+        "Business Generalist (Founder's Office / Strategy & Ops)",
+        "Business Head",
+        "Partnerships"
+      ],
+      "seniority": "Mid-career",
+      "aiNative": null,
+      "builtAiProduct": true,
+      "aiSubDomain": null,
+      "aiTools": [],
+      "tools": [],
+      "mentorshipQuality": "Excellent",
+      "activities": 4,
+      "city": "Bengaluru",
+      "utcOffsetMin": 330,
+      "profile": "rich",
+      "missing": []
+    },
+    {
+      "id": "M045",
+      "name": "Mentor 045",
+      "domains": [
+        "Venture Capital"
+      ],
+      "masterSector": "Venture capital",
+      "sectors": [
+        "Venture capital"
+      ],
+      "roles": [],
+      "seniority": "Mid-career",
+      "aiNative": null,
+      "builtAiProduct": null,
+      "aiSubDomain": null,
+      "aiTools": [],
+      "tools": [],
+      "mentorshipQuality": null,
+      "activities": 0,
+      "city": "Bengaluru",
+      "utcOffsetMin": 330,
+      "profile": "partial",
+      "missing": [
+        "roles",
+        "AI experience",
+        "mentorship quality"
+      ]
+    },
+    {
+      "id": "M046",
+      "name": "Mentor 046",
+      "domains": [
+        "Growth"
+      ],
+      "masterSector": "SaaS",
+      "sectors": [
+        "E-commerce",
+        "Fintech",
+        "SaaS",
+        "D2C",
+        "Edtech"
+      ],
+      "roles": [
+        "Sales / CSM / Partnerships",
+        "Growth",
+        "Business Generalist (Founder's Office / Strategy & Ops)"
+      ],
+      "seniority": null,
+      "aiNative": null,
+      "builtAiProduct": true,
+      "aiSubDomain": null,
+      "aiTools": [
+        "Zapier"
+      ],
+      "tools": [
+        "HubSpot",
+        "Excel"
+      ],
+      "mentorshipQuality": null,
+      "activities": 0,
+      "city": "Bengaluru",
+      "utcOffsetMin": 330,
+      "profile": "partial",
+      "missing": [
+        "seniority",
+        "mentorship quality"
+      ]
+    },
+    {
+      "id": "M047",
+      "name": "Mentor 047",
+      "domains": [
+        "Category Management"
+      ],
+      "masterSector": "Quick commerce",
+      "sectors": [
+        "Quick commerce",
+        "E-commerce"
+      ],
+      "roles": [
+        "Category Management"
+      ],
+      "seniority": "Mid-career",
+      "aiNative": null,
+      "builtAiProduct": false,
+      "aiSubDomain": null,
+      "aiTools": [],
+      "tools": [
+        "Excel"
+      ],
+      "mentorshipQuality": null,
+      "activities": 2,
+      "city": "Bengaluru",
+      "utcOffsetMin": 330,
+      "profile": "rich",
+      "missing": [
+        "mentorship quality"
+      ]
+    },
+    {
+      "id": "M048",
+      "name": "Mentor 048",
+      "domains": [
+        "Marketing"
+      ],
+      "masterSector": null,
+      "sectors": [
+        "SaaS",
+        "Edtech"
+      ],
+      "roles": [
+        "Marketing",
+        "AI & Analytics",
+        "Business Generalist (Founder's Office / Strategy & Ops)"
+      ],
+      "seniority": null,
+      "aiNative": null,
+      "builtAiProduct": null,
+      "aiSubDomain": null,
+      "aiTools": [],
+      "tools": [
+        "HubSpot",
+        "Google Analytics",
+        "Jira",
+        "Excel"
+      ],
+      "mentorshipQuality": null,
+      "activities": 0,
+      "city": "San Francisco",
+      "utcOffsetMin": -480,
+      "profile": "partial",
+      "missing": [
+        "seniority",
+        "AI experience",
+        "mentorship quality"
+      ]
+    },
+    {
+      "id": "M049",
+      "name": "Mentor 049",
+      "domains": [
+        "Business Generalist"
+      ],
+      "masterSector": "D2C",
+      "sectors": [
+        "Quick commerce",
+        "E-commerce",
+        "D2C",
+        "Edtech"
+      ],
+      "roles": [
+        "Product Management",
+        "Marketing",
+        "Growth",
+        "Business Generalist (Founder's Office / Strategy & Ops)"
+      ],
+      "seniority": null,
+      "aiNative": null,
+      "builtAiProduct": true,
+      "aiSubDomain": null,
+      "aiTools": [
+        "n8n",
+        "Zapier"
+      ],
+      "tools": [
+        "Google Analytics",
+        "Excel",
+        "Mixpanel"
+      ],
+      "mentorshipQuality": null,
+      "activities": 0,
+      "city": "Bengaluru",
+      "utcOffsetMin": 330,
+      "profile": "partial",
+      "missing": [
+        "seniority",
+        "mentorship quality"
+      ]
+    },
+    {
+      "id": "M050",
+      "name": "Mentor 050",
+      "domains": [
+        "Business Generalist"
+      ],
+      "masterSector": "Climate tech",
+      "sectors": [
+        "Climate tech",
+        "Manufacturing",
+        "Logistics"
+      ],
+      "roles": [],
+      "seniority": "Mid-career",
+      "aiNative": null,
+      "builtAiProduct": null,
+      "aiSubDomain": null,
+      "aiTools": [],
+      "tools": [],
+      "mentorshipQuality": "Good",
+      "activities": 5,
+      "city": "Bengaluru",
+      "utcOffsetMin": 330,
+      "profile": "partial",
+      "missing": [
+        "roles",
+        "AI experience"
+      ]
+    }
+  ]
+}
