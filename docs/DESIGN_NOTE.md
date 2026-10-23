@@ -1,33 +1,38 @@
 # Mentor Connect: design note
 
-**What I built.** A student describes a career problem to an assistant, gets 1-3 mentors from the 50-mentor sheet, books a 30-minute slot, and after the call (which happens elsewhere) receives a write-up with action items they can tick off. Mesa gets a dashboard. Everything runs end to end; the rest of this page is why it is shaped this way.
+*Mesa technical associate assignment · Aniket Rana · live at mentor-connect-beryl-one.vercel.app*
 
-## The decisions that matter
+A student describes a career problem to an assistant, gets 1-3 mentors from the 50-mentor sheet, books a 30-minute call (the call itself happens elsewhere) and afterwards receives a write-up with action items. Mesa sees where students drop off and which demand it cannot serve.
 
-1. **The model can't make up a mentor.** All 50 profiles sit in the prompt (≈4k tokens, so no retrieval layer is needed). The model answers through a `recommend_mentors` tool that returns mentor *IDs*. Code checks every ID against the database and builds the card from the sheet, so facts on screen are never model-written. The model's free text ("why this mentor") must also trace to the mentor's record or the student's own words, or it is replaced by a template. Contact fields and the anonymised company labels never reach the prompt.
-2. **The sheet is messy, and the product respects that.** Of 52 rows there were 2 exact duplicates, 28 of 50 mentors have no seniority, and only 13 have a rating. The ingest script normalises spellings (`Ecomm`/`E - Commerce`, `Bombay`/`Mumbai`) and drops placeholder contacts. Unknown stays *unknown*: the assistant is told "unknown ≠ none", so it won't call anyone "junior" or "director". Thin profiles are flagged to the student instead of being hidden or embellished.
-3. **Honest "no match".** The list is business/marketing/product/growth/sales-heavy, with no design or engineering mentors. The assistant says so, shows at most two closest mentors with explicit gaps, and logs the gap. The admin "Demand & gaps" page turns this into a recruiting brief.
-4. **Post-call write-up from a transcript or notes, quote-verified.** The call is outside the app, so the input is a pasted/uploaded transcript (.txt/.vtt/.srt) or the student's own recap. Every advice point, action item and resource must carry a verbatim quote; code verifies the quote exists in the transcript and drops items that fail. Sections with no evidence appear as "not covered". Text is treated as data, not instructions.
-5. **Mentor review gate, with a timeout.** A draft goes to the mentor via a no-login private link to edit/approve. After 48h it is released automatically, labelled "not reviewed". Rationale: wrong advice attributed to a mentor is costly, but a mentor who never replies must not strand the student.
-6. **Double-booking is impossible by construction:** a unique database index on (mentor, slot), not an application-level check. Calendar = `.ics` + Google Calendar link instead of OAuth.
-7. **Progress across calls.** A Journey page and reminder emails; the assistant reads prior summaries to suggest the next step or a follow-up with the same mentor.
+## Decisions I took, and why
 
-## Awkward cases handled (all in the eval suite)
-Vague input (≤2 questions, then it must recommend) · multiple problems · no match · crisis messages (resources, no mentor push, flagged) vs ordinary stress (not treated as a crisis) · prompt injection · fake/famous mentors · employer/phone questions · job-guarantee asks · rejection and refinement · Hinglish · slot collisions · cancel/reschedule/no-shows · too-short, garbled, small-talk and injected transcripts · PII in transcripts · LLM failures (retry, repair once, graceful message, state kept).
+1. **The model cannot invent a mentor.** All 50 profiles sit in the prompt (about 4k tokens, so no retrieval layer). The model answers through a tool that returns mentor IDs; code validates them and builds each card from the sheet. Its free text must trace to the record or the student's own words, or a template replaces it. A made-up mentor or employer is the worst failure here, so it is prevented structurally, not by prompting.
+2. **The sheet is messy, so the product says so.** 52 rows, 2 duplicates; 28 of 50 mentors have no seniority; 13 have a rating. Unknown stays unknown (never "junior"), thin profiles are flagged to the student, and contact fields and anonymised company labels never reach a prompt or a page.
+3. **Honest "no match".** The list leans business, marketing, product, growth and sales; there are no design or engineering mentors. The assistant says so, shows at most two closest mentors with their gaps, and logs the gap. The student can join a waitlist; Mesa gets a recruiting brief from the Demand page.
+4. **The write-up comes from a transcript and is quote-verified.** The call is outside the app, so the input is a pasted or uploaded transcript (.txt/.vtt/.srt) or the student's own recap. Every advice point, action item and resource needs a verbatim quote that code checks; failures are dropped, uncovered topics show as "not covered", and transcript text is treated as data, never instructions.
+5. **A mentor review gate with a timeout.** A no-login private link lets the mentor edit or approve. After 48 hours it releases, labelled "not reviewed". Wrong advice under a mentor's name is costly, but a silent mentor must not strand a student.
+6. **Correctness lives in the database.** A unique index on (mentor, slot) makes double-booking impossible even in a race; only slots the mentor actually offers can be booked. Calendar is .ics plus a Google Calendar link, not OAuth.
+7. **Safety is checked before routing.** A classifier plus a regex backstop catches crisis messages: the student gets resources, not mentors, and the team is alerted. Ordinary stress is not treated as a crisis (the evals caught this going wrong).
+8. **Evidence, not vibes.** 35 live-model checks (awkward cases, injection, no-match, Hinglish, bad transcripts), invariants on every reply (IDs exist, no contact strings, at most 3 picks), 8 relevance cases scoring picks against the mentor's own record (96% precision on the last run), and 26 deterministic tests. The admin view answers real questions: funnel by student, unmet demand, mentor concentration, quality flags.
 
-**Evidence:** `npm run eval` runs 35 live checks (29 assistant, 6 summary) plus invariants on every reply (IDs exist, no contact strings, ≤3 picks). 8 of them score *relevance*: the picks must match the need on the mentor's own record (precision 96%, a good pick in 8/8 cases on the last run). `npm test` adds 26 deterministic tests, including the double-booking index and sign-in token rules. Last eval run: see `evals/REPORT.md`.
+## Decisions I chose not to take, and why
 
-## Deliberately not built
-Accounts and passwords (students sign in with an emailed one-time link, mentors with signed links, admin with one password) · Calendar OAuth/availability sync (mentors set their own hours instead) · automatic call capture or transcription bot · payments · mentor onboarding/profile editing · vector search (unnecessary at 50 mentors; the path at scale is retrieval then rerank) · WhatsApp. Each costs more than it proves in a prototype.
+- **Accounts and passwords.** An emailed one-time link (or name + email) proves the flow; passwords add risk and no insight.
+- **Calendar OAuth, call capture, transcription bot.** Integration and verification cost far more than they prove; .ics plus transcript paste gives most of the value.
+- **Vector search.** 50 mentors fit in a prompt. At thousands: retrieve, then rerank.
+- **Payments, WhatsApp, mentor onboarding.** Not what a prototype needs to prove.
+- **Streaming and ratings-into-recommendations.** Replies take 5-20s, a known cost (the chat shows staged progress). Ratings would change the prompt and need their own eval.
 
 ## Assumptions
-- Mentor availability starts **seeded** (stable weekly pattern per mentor in their city's time zone; the sheet has none) until the mentor sets their own hours on their private link.
-- A mentor's rating ("Quality of Mentorship") is Mesa's internal view; I show it only when present and use it as a tiebreaker, never as a guarantee.
-- English-first with light Hinglish; mentors are reachable through the private link rather than the sheet's placeholder emails.
-- The demo data (30 students) is flagged and removable; "Real only" filters it from every admin view.
+
+- The sheet has no availability, so each mentor gets a seeded weekly pattern in their city's time zone until they set their own hours.
+- "Quality of Mentorship" is Mesa's internal view: shown only when present, a tie-breaker, never a guarantee.
+- English-first with light Hinglish; the crisis reply is India-first (Tele-MANAS). Mentors are reached by private link because the sheet's contact fields are placeholders.
+- Calls are 30 minutes; changes close 2 hours before.
+- The 30 demo students are labelled and removable; every admin view can filter to real data only.
 
 ## AI in the build
-I used Claude Code to scaffold, write and test, but kept myself on the hard parts: the constraint design (IDs-not-facts), the data cleaning rules, and the eval cases. The evals caught real bugs: a crisis classifier that fired on "idk, everything", a grounding check that rejected "PM", and clarifying questions that weren't counted toward the cap.
 
-## Known limits
-Responses take 5-20s (no streaming yet, only staged progress text) · the grounding check is a heuristic, not a proof · sign-in is only verified when an email provider is configured · reminders are daily, not hourly · no mobile polish pass beyond responsive layout.
+I used Claude Code to scaffold, write and test, and kept my own judgement on the hard parts: the IDs-not-facts constraint, the data-cleaning rules and the eval cases. The evals caught real bugs: a crisis classifier that fired on "idk, everything", a grounding check that rejected "PM", and clarifying questions that were not counted toward the cap.
+
+_Known limits: replies take 5-20s; the grounding check is a heuristic, not a proof; emailed sign-in only works for everyone once a sender domain is verified; reminders are daily; no real-device mobile pass._
