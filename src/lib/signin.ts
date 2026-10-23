@@ -7,15 +7,16 @@ export const LINK_TTL_MS = 20 * 60_000;
 export const hashToken = (t: string) => createHash("sha256").update(t).digest("hex");
 
 /**
- * Email confirmation is enforced whenever real email can be delivered (RESEND_API_KEY set), or when
- * REQUIRE_EMAIL_VERIFY=on. Without a mail provider a link could never reach anyone, so the prototype
- * falls back to name + email sign-in (documented gap). REQUIRE_EMAIL_VERIFY=off forces that fallback.
+ * Email confirmation is enforced only when a link can reach ANY student: a mail provider is configured AND
+ * EMAIL_FROM is set (Resend's shared sandbox sender only delivers to the account owner, so a key alone is
+ * not enough), or REQUIRE_EMAIL_VERIFY=on. Otherwise the prototype falls back to name + email sign-in
+ * (documented gap). REQUIRE_EMAIL_VERIFY=off forces that fallback.
  */
 export function verifyRequired(): boolean {
   const f = process.env.REQUIRE_EMAIL_VERIFY;
   if (f === "on") return true;
   if (f === "off") return false;
-  return !!process.env.RESEND_API_KEY;
+  return !!process.env.RESEND_API_KEY && !!process.env.EMAIL_FROM;
 }
 
 /** *.test addresses are reserved for demos and are outbox-only, so a link to them can't be delivered. */

@@ -116,6 +116,20 @@ test("sign-in: instant without a mail provider, one-time link when verification 
     delete process.env.REQUIRE_EMAIL_VERIFY;
   }
   assert.equal(m.signin.verifyRequired(), false);
+
+  // a key alone (Resend sandbox sender) must not lock students out; a key + verified sender does enforce it
+  process.env.RESEND_API_KEY = "re_test";
+  try {
+    assert.equal(m.signin.verifyRequired(), false);
+    process.env.EMAIL_FROM = "Mentor Connect <hello@example.com>";
+    assert.equal(m.signin.verifyRequired(), true);
+    process.env.REQUIRE_EMAIL_VERIFY = "off";
+    assert.equal(m.signin.verifyRequired(), false);
+  } finally {
+    delete process.env.RESEND_API_KEY;
+    delete process.env.EMAIL_FROM;
+    delete process.env.REQUIRE_EMAIL_VERIFY;
+  }
 });
 
 test("only the hash of a sign-in token is stored", async () => {
