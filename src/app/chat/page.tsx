@@ -4,6 +4,9 @@ import { currentStudent } from "@/lib/session";
 import { one } from "@/lib/db";
 import { loadMessages } from "@/lib/assistant";
 import { Chat } from "@/components/Chat";
+import { Icon } from "@/components/Icon";
+
+export const metadata = { title: "Find a mentor" };
 
 export default async function ChatPage({ searchParams }: { searchParams: Promise<{ c?: string; new?: string; q?: string }> }) {
   const student = await currentStudent();
@@ -17,12 +20,18 @@ export default async function ChatPage({ searchParams }: { searchParams: Promise
   const messages = conversationId ? await loadMessages(conversationId) : [];
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-6">
-      <div className="flex items-center gap-3 mb-4">
-        <h1 className="font-display text-2xl font-semibold">Find your mentor</h1>
-        {messages.length > 0 && <Link className="btn ml-auto" href="/chat?new=1">New topic</Link>}
+    <div className="relative isolate flex flex-col min-h-[calc(100dvh-4rem)]">
+      <div className="aurora !opacity-60" />
+      <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 pt-6 flex flex-col flex-1">
+        <div className="flex items-center gap-3 mb-6">
+          <div className="grid">
+            <span className="label">Assistant</span>
+            <h1 className="text-lg font-semibold tracking-tight">Find your mentor</h1>
+          </div>
+          {messages.length > 0 && <Link className="btn btn-sm ml-auto" href="/chat?new=1"><Icon name="plus" size={14} /> New topic</Link>}
+        </div>
+        <Chat key={conversationId ?? "new"} initial={messages} conversationId={conversationId} prefill={sp.q} />
       </div>
-      <Chat key={conversationId ?? "new"} initial={messages} conversationId={conversationId} prefill={sp.q} />
     </div>
   );
 }

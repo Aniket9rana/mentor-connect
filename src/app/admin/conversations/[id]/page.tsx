@@ -17,7 +17,7 @@ export default async function ConversationTrail({ params }: { params: Promise<{ 
     <div className="grid gap-6 max-w-3xl">
       <Link href="/admin/conversations" className="text-sm text-muted underline w-fit">← All conversations</Link>
       <header>
-        <h1 className="font-display text-2xl font-semibold">{c.topic ?? "Conversation"}</h1>
+        <h1 className="text-2xl sm:text-[1.7rem] font-semibold tracking-tight">{c.topic ?? "Conversation"}</h1>
         <p className="text-sm text-muted">{student?.name}{student?.is_demo ? " (demo)" : ""} · outcome: {(c.outcome ?? "in progress").replace("_", " ")}</p>
       </header>
       <section className="grid gap-2">

@@ -8,11 +8,11 @@ export default async function Conversations() {
        FROM conversations c JOIN students s ON s.id = c.student_id WHERE EXISTS (SELECT 1 FROM messages m WHERE m.conversation_id = c.id) ORDER BY c.updated_at DESC LIMIT 100`);
   const badge: Record<string, string> = { recommended: "badge-ok", no_match: "badge-bad", sensitive: "badge-warn" };
   return (
-    <div className="grid gap-4">
-      <h1 className="font-display text-3xl font-semibold">Conversations</h1>
-      <div className="grid gap-2">
+    <div className="grid gap-4 grid-cols-[minmax(0,1fr)]">
+      <h1 className="text-2xl sm:text-[1.7rem] font-semibold tracking-tight">Conversations</h1>
+      <div className="grid gap-2 grid-cols-[minmax(0,1fr)]">
         {rows.map((r) => (
-          <Link key={r.id} href={`/admin/conversations/${r.id}`} className="card p-3 flex gap-3 items-center hover:bg-surface2">
+          <Link key={r.id} href={`/admin/conversations/${r.id}`} className="card card-lift p-4 flex gap-3 items-center">
             <div className="min-w-0"><div className="text-sm font-medium truncate">{r.topic ?? "(no topic yet - student hasn't been matched)"}</div><div className="text-xs text-muted">{r.name}{r.is_demo ? " · demo" : ""} · {r.n} messages · <LocalTime iso={r.updated_at} mode="date" /></div></div>
             <span className={`badge ml-auto ${badge[r.outcome ?? ""] ?? ""}`}>{(r.outcome ?? "in progress").replace("_", " ")}</span>
           </Link>

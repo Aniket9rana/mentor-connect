@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { SAMPLE_TRANSCRIPT } from "@/lib/sample-transcript";
+import { Icon } from "./Icon";
 
 /** Used by the student (cookie auth) and by the mentor (token auth) - `endpoint` and `mentorMode` switch the wiring. */
 export function TranscriptForm({ endpoint, mentorMode = false }: { endpoint: string; mentorMode?: boolean }) {
@@ -38,14 +39,19 @@ export function TranscriptForm({ endpoint, mentorMode = false }: { endpoint: str
   return (
     <form onSubmit={submit} className="grid gap-3">
       {!mentorMode && (
-        <fieldset className="flex gap-4 text-sm">
-          <legend className="label mb-1">What are you adding?</legend>
-          <label className="flex items-center gap-2"><input type="radio" checked={kind === "transcript"} onChange={() => setKind("transcript")} /> Call transcript or notes</label>
-          <label className="flex items-center gap-2"><input type="radio" checked={kind === "debrief"} onChange={() => setKind("debrief")} /> My own recap (no transcript)</label>
+        <fieldset className="grid gap-2">
+          <legend className="field-label mb-1">What are you adding?</legend>
+          <div className="inline-flex gap-0.5 rounded-xl border border-line bg-surface2 p-0.5 text-sm w-fit max-w-full flex-wrap">
+            {([["transcript", "Call transcript or notes"], ["debrief", "My own recap"]] as const).map(([k, label]) => (
+              <label key={k} className={`rounded-[10px] px-3 py-1.5 font-medium cursor-pointer transition-all has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-brand ${kind === k ? "bg-surface text-fg shadow-[var(--shadow-sm)]" : "text-muted hover:text-fg"}`}>
+                <input type="radio" className="sr-only" checked={kind === k} onChange={() => setKind(k)} /> {label}
+              </label>
+            ))}
+          </div>
         </fieldset>
       )}
       <textarea
-        className="input min-h-48 font-mono text-[0.82rem]"
+        className="input min-h-48 font-mono text-[0.82rem] leading-relaxed"
         placeholder={kind === "debrief" && !mentorMode ? "In your own words: what did you talk about, what did the mentor suggest, what will you do next?" : "Paste the transcript or your notes from the call (Meet / Zoom / Otter .txt, .vtt and .srt all work)…"}
         value={text}
         onChange={(e) => setText(e.target.value)}
@@ -53,15 +59,15 @@ export function TranscriptForm({ endpoint, mentorMode = false }: { endpoint: str
         aria-label="Transcript or notes"
       />
       <div className="flex flex-wrap gap-2 items-center">
-        <label className="btn cursor-pointer">
-          Upload .txt / .vtt / .srt
+        <label className="btn btn-sm cursor-pointer">
+          <Icon name="download" size={14} className="rotate-180" /> Upload .txt / .vtt / .srt
           <input type="file" accept=".txt,.vtt,.srt,text/plain" className="sr-only" onChange={(e) => readFile(e.target.files?.[0])} />
         </label>
-        <button type="button" className="btn" onClick={() => setText(SAMPLE_TRANSCRIPT)}>Use sample transcript (demo)</button>
-        <button className="btn btn-primary ml-auto" disabled={busy || !text.trim()}>{busy ? "Writing it up… (≈20s)" : "Generate write-up"}</button>
+        <button type="button" className="btn btn-sm" onClick={() => setText(SAMPLE_TRANSCRIPT)}>Use sample transcript (demo)</button>
+        <button className="btn btn-primary ml-auto" disabled={busy || !text.trim()}>{busy ? "Writing it up… (≈20s)" : <>Generate write-up <Icon name="sparkles" size={15} /></>}</button>
       </div>
       {err && <p role="alert" className="text-sm text-bad">{err}</p>}
-      <p className="text-xs text-muted">Every point in the write-up is tied to a quote from what you paste. Personal details like phone numbers are left out.</p>
+      <p className="text-xs text-muted flex items-center gap-1.5"><Icon name="shield-check" size={13} /> Every point in the write-up is tied to a quote from what you paste. Personal details like phone numbers are left out.</p>
     </form>
   );
 }

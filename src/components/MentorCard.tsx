@@ -1,35 +1,47 @@
 import Link from "next/link";
 import type { Card } from "@/lib/assistant";
+import { Avatar } from "./Brand";
+import { Icon } from "./Icon";
 
 export function MentorCard({ card, conversationId, rank }: { card: Card; conversationId?: string; rank: number }) {
   const href = `/mentors/${card.mentorId}${conversationId ? `?c=${conversationId}` : ""}`;
   return (
-    <article className="card p-4 flex flex-col gap-3">
+    <article className="card card-lift p-5 flex flex-col gap-4 fade-up" style={{ animationDelay: `${rank * 70}ms` }}>
       <header className="flex items-start gap-3">
-        <span className="h-8 w-8 shrink-0 rounded-full bg-accentsoft text-accent grid place-items-center text-sm font-bold">{rank}</span>
-        <div className="min-w-0">
-          <h3 className="font-display text-lg font-semibold leading-tight">{card.name}</h3>
-          <p className="text-sm text-muted">{card.headline}</p>
-        </div>
-        <div className="ml-auto flex flex-col items-end gap-1">
-          {card.quality && <span className="badge badge-ok">Mentorship: {card.quality}</span>}
-          {card.profile === "thin" && <span className="badge badge-warn">Limited details on file</span>}
+        <Avatar name={card.name} seed={card.mentorId} size={46} />
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center gap-2">
+            <h3 className="font-semibold tracking-tight leading-tight truncate">{card.name}</h3>
+            <span className="font-mono text-[0.65rem] text-muted ml-auto shrink-0">#{rank}</span>
+          </div>
+          <p className="text-[0.82rem] text-muted leading-snug mt-0.5">{card.headline}</p>
         </div>
       </header>
-      <p className="text-sm leading-relaxed"><span className="label block mb-0.5">Why this mentor</span>{card.reason}</p>
-      {card.gaps && <p className="text-sm text-muted leading-relaxed"><span className="label block mb-0.5">Keep in mind</span>{card.gaps}</p>}
-      {card.ask && <p className="text-sm leading-relaxed"><span className="label block mb-0.5">Try opening with</span>“{card.ask}”</p>}
-      <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-xs border-t border-line pt-3">
+      {(card.quality || card.profile === "thin") && (
+        <div className="flex gap-1.5 flex-wrap -mt-1">
+          {card.quality && <span className="badge badge-ok"><Icon name="star" size={11} /> Mentorship: {card.quality}</span>}
+          {card.profile === "thin" && <span className="badge badge-warn"><Icon name="alert" size={11} /> Limited details on file</span>}
+        </div>
+      )}
+      <div className="grid gap-3.5 text-sm">
+        <div><span className="label block mb-1">Why this mentor</span><p className="leading-relaxed text-fg2">{card.reason}</p></div>
+        {card.gaps && <div><span className="label block mb-1">Keep in mind</span><p className="leading-relaxed text-muted">{card.gaps}</p></div>}
+        {card.ask && (
+          <div className="rounded-xl bg-accentsoft px-3.5 py-3">
+            <span className="label block mb-1 !text-accentink">Try opening with</span>
+            <p className="leading-relaxed text-fg2">“{card.ask}”</p>
+          </div>
+        )}
+      </div>
+      <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 text-xs border-t border-line pt-3.5 mt-auto">
         {card.facts.slice(0, 5).map((f) => (
           <div key={f.label} className="contents">
             <dt className="text-muted">{f.label}</dt>
-            <dd>{f.value}</dd>
+            <dd className="text-fg2">{f.value}</dd>
           </div>
         ))}
       </dl>
-      <div className="flex gap-2 pt-1">
-        <Link className="btn btn-primary" href={href}>View &amp; book a call</Link>
-      </div>
+      <Link className="btn btn-primary w-full" href={href}>View &amp; book a call <Icon name="arrow-right" size={15} /></Link>
     </article>
   );
 }

@@ -10,7 +10,7 @@ export default async function Overview({ searchParams }: { searchParams: Promise
     <div className="grid gap-8">
       <header className="flex items-center gap-3 flex-wrap">
         <div>
-          <h1 className="font-display text-3xl font-semibold">How is Mentor Connect doing?</h1>
+          <h1 className="text-2xl sm:text-[1.7rem] font-semibold tracking-tight">How is Mentor Connect doing?</h1>
           <p className="text-muted text-sm">{k.students} students in view{k.demoStudents > 0 && <> · <span className="badge badge-warn">{k.demoStudents} of {k.totalStudents} students are labelled demo data</span></>}</p>
         </div>
         <div className="ml-auto"><ScopeToggle scope={scope} path="/admin" /></div>
@@ -28,7 +28,7 @@ export default async function Overview({ searchParams }: { searchParams: Promise
 
       <section className="card p-5 grid gap-4">
         <div>
-          <h2 className="font-display text-xl font-semibold">Where students drop off</h2>
+          <h2 className="text-base font-semibold tracking-tight">Where students drop off</h2>
           <p className="text-sm text-muted">Students (not sessions) reaching each step. The % is of the step before it.</p>
         </div>
         <div className="grid gap-3">
@@ -39,7 +39,7 @@ export default async function Overview({ searchParams }: { searchParams: Promise
       </section>
 
       <section className="card p-5 grid gap-3">
-        <h2 className="font-display text-xl font-semibold">Admin tools</h2>
+        <h2 className="text-base font-semibold tracking-tight">Admin tools</h2>
         <AdminTools />
       </section>
     </div>

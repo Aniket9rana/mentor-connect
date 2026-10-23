@@ -12,7 +12,7 @@ export default async function Quality({ searchParams }: { searchParams: Promise<
     <div className="grid gap-8">
       <header className="flex items-center gap-3 flex-wrap">
         <div>
-          <h1 className="font-display text-3xl font-semibold">Quality &amp; safety</h1>
+          <h1 className="text-2xl sm:text-[1.7rem] font-semibold tracking-tight">Quality &amp; safety</h1>
           <p className="text-muted text-sm">Where the AI or the process needed a safety net, and what needs a human.</p>
         </div>
         <div className="ml-auto"><ScopeToggle scope={scope} path="/admin/quality" /></div>
@@ -30,7 +30,7 @@ export default async function Quality({ searchParams }: { searchParams: Promise<
       </section>
 
       <section className="grid gap-3">
-        <h2 className="font-display text-xl font-semibold">Needs a human ({q.flags.length})</h2>
+        <h2 className="text-base font-semibold tracking-tight">Needs a human ({q.flags.length})</h2>
         {q.flags.length === 0 && <p className="text-sm text-muted">Nothing open.</p>}
         {q.flags.map((f) => (
           <article key={f.id} className="card p-3 flex gap-3 items-start text-sm">
@@ -46,14 +46,14 @@ export default async function Quality({ searchParams }: { searchParams: Promise<
 
       <section className="grid md:grid-cols-2 gap-4">
         <div className="card p-5 grid gap-3">
-          <h2 className="font-display text-xl font-semibold">Write-ups waiting on mentors</h2>
+          <h2 className="text-base font-semibold tracking-tight">Write-ups waiting on mentors</h2>
           {q.drafts.length === 0 && <p className="text-sm text-muted">None waiting.</p>}
           {q.drafts.map((d) => (
             <div key={d.booking_id} className="text-sm flex gap-2"><span>{d.student} ↔ {d.mentor_id}</span><span className="ml-auto text-muted">drafted <LocalTime iso={d.created_at} mode="date" /></span></div>
           ))}
         </div>
         <div className="card p-5 grid gap-3">
-          <h2 className="font-display text-xl font-semibold">Call ratings</h2>
+          <h2 className="text-base font-semibold tracking-tight">Call ratings</h2>
           {q.dist.length === 0 && <p className="text-sm text-muted">No ratings yet.</p>}
           {q.dist.map((d) => <Bar key={d.rating} label={`${d.rating} star${d.rating === 1 ? "" : "s"}`} value={Number(d.c)} max={maxDist} />)}
         </div>

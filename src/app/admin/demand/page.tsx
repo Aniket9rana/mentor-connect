@@ -11,7 +11,7 @@ export default async function Demand({ searchParams }: { searchParams: Promise<{
     <div className="grid gap-8">
       <header className="flex items-center gap-3 flex-wrap">
         <div>
-          <h1 className="font-display text-3xl font-semibold">Demand &amp; gaps</h1>
+          <h1 className="text-2xl sm:text-[1.7rem] font-semibold tracking-tight">Demand &amp; gaps</h1>
           <p className="text-muted text-sm">What students ask for that the mentor list can&apos;t fully serve. This is the recruiting brief.</p>
         </div>
         <div className="ml-auto"><ScopeToggle scope={scope} path="/admin/demand" /></div>
@@ -25,28 +25,28 @@ export default async function Demand({ searchParams }: { searchParams: Promise<{
 
       <section className="grid md:grid-cols-2 gap-4">
         <div className="card p-5 grid gap-3">
-          <h2 className="font-display text-xl font-semibold">Expertise we&apos;re missing</h2>
+          <h2 className="text-base font-semibold tracking-tight">Expertise we&apos;re missing</h2>
           {d.topUnmet.length === 0 && <p className="text-sm text-muted">No gaps logged yet.</p>}
           {d.topUnmet.map(([k, v]) => <Bar key={k} label={k} value={v} max={d.topUnmet[0][1]} />)}
         </div>
         <div className="card p-5 grid gap-3">
-          <h2 className="font-display text-xl font-semibold">Most-asked topics</h2>
+          <h2 className="text-base font-semibold tracking-tight">Most-asked topics</h2>
           {d.topTags.length === 0 && <p className="text-sm text-muted">Nothing yet.</p>}
           {d.topTags.map(([k, v]) => <Bar key={k} label={k} value={v} max={d.topTags[0][1]} />)}
         </div>
       </section>
 
       <section className="card p-5 grid gap-3">
-        <h2 className="font-display text-xl font-semibold">Supply vs. demand by domain</h2>
+        <h2 className="text-base font-semibold tracking-tight">Supply vs. demand by domain</h2>
         <p className="text-sm text-muted">How often each mentor domain was recommended, next to how many mentors we have in it. A domain with many recommendations and few mentors is a bottleneck.</p>
         <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead><tr className="text-left text-muted"><th className="py-1 pr-3 font-medium">Domain</th><th className="font-medium pr-3">Mentors</th><th className="font-medium pr-3">Times recommended</th><th className="font-medium w-1/3">Per mentor</th></tr></thead>
+          <table className="tbl">
+            <thead><tr><th>Domain</th><th>Mentors</th><th>Times recommended</th><th className="w-1/3">Per mentor</th></tr></thead>
             <tbody>
               {d.byDomain.map((r) => (
-                <tr key={r.domain} className="border-t border-line">
-                  <td className="py-1.5 pr-3">{r.domain}</td><td className="pr-3 tabular-nums">{r.mentors}</td><td className="pr-3 tabular-nums">{r.recs}</td>
-                  <td><div className="h-2 rounded-full bg-surface2 overflow-hidden"><div className="h-full bg-accent" style={{ width: `${(r.recs / Math.max(1, r.mentors) / maxPer) * 100}%` }} /></div></td>
+                <tr key={r.domain}>
+                  <td className="font-medium">{r.domain}</td><td className="tabular-nums">{r.mentors}</td><td className="tabular-nums">{r.recs}</td>
+                  <td><div className="h-2 rounded-full bg-surface3 overflow-hidden"><div className="h-full rounded-full" style={{ width: `${(r.recs / Math.max(1, r.mentors) / maxPer) * 100}%`, background: "linear-gradient(90deg, var(--brand-1), var(--brand-3))" }} /></div></td>
                 </tr>
               ))}
             </tbody>
@@ -55,7 +55,7 @@ export default async function Demand({ searchParams }: { searchParams: Promise<{
       </section>
 
       <section className="grid gap-3">
-        <h2 className="font-display text-xl font-semibold">Recent unserved requests</h2>
+        <h2 className="text-base font-semibold tracking-tight">Recent unserved requests</h2>
         {d.gaps.length === 0 && <p className="text-sm text-muted">None.</p>}
         {d.gaps.map((g, i) => (
           <article key={i} className="card p-4 grid gap-1">

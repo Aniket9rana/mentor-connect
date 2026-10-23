@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import type { SummaryContent } from "@/lib/summarise";
+import { Icon } from "./Icon";
 
 export function ReviewEditor({ token, initial }: { token: string; initial: SummaryContent }) {
   const router = useRouter();
@@ -23,11 +24,11 @@ export function ReviewEditor({ token, initial }: { token: string; initial: Summa
 
   return (
     <div className="grid gap-5">
-      <label className="grid gap-1"><span className="label">Headline</span><input className="input" value={c.headline} onChange={(e) => setC({ ...c, headline: e.target.value })} /></label>
-      <label className="grid gap-1"><span className="label">Summary (what the student will read)</span><textarea className="input min-h-28" value={c.summary} onChange={(e) => setC({ ...c, summary: e.target.value })} /></label>
+      <label className="grid gap-1"><span className="field-label">Headline</span><input className="input" value={c.headline} onChange={(e) => setC({ ...c, headline: e.target.value })} /></label>
+      <label className="grid gap-1"><span className="field-label">Summary (what the student will read)</span><textarea className="input min-h-28" value={c.summary} onChange={(e) => setC({ ...c, summary: e.target.value })} /></label>
 
       <fieldset className="grid gap-2">
-        <legend className="label">Key advice - remove anything that is wrong</legend>
+        <legend className="field-label mb-1">Key advice - remove anything that is wrong</legend>
         {c.key_advice.map((a, i) => (
           <div key={i} className="card p-3 grid gap-1">
             <input className="input" value={a.point} onChange={(e) => setC({ ...c, key_advice: c.key_advice.map((x, j) => (j === i ? { ...x, point: e.target.value } : x)) })} />
@@ -38,7 +39,7 @@ export function ReviewEditor({ token, initial }: { token: string; initial: Summa
       </fieldset>
 
       <fieldset className="grid gap-2">
-        <legend className="label">Action items for the student</legend>
+        <legend className="field-label mb-1">Action items for the student</legend>
         {c.action_items.map((a, i) => (
           <div key={i} className="card p-3 grid gap-1">
             <input className="input" value={a.task} onChange={(e) => setC({ ...c, action_items: c.action_items.map((x, j) => (j === i ? { ...x, task: e.target.value } : x)) })} />
@@ -53,16 +54,16 @@ export function ReviewEditor({ token, initial }: { token: string; initial: Summa
 
       {c.resources.length > 0 && (
         <fieldset className="grid gap-2">
-          <legend className="label">Resources</legend>
+          <legend className="field-label mb-1">Resources</legend>
           {c.resources.map((r, i) => (
             <div key={i} className="card p-3 flex items-center gap-2 text-sm"><span><strong>{r.name}</strong> - {r.note}</span><button className="btn btn-danger ml-auto" onClick={() => remove("resources", i)}>Remove</button></div>
           ))}
         </fieldset>
       )}
 
-      <label className="grid gap-1"><span className="label">Suggested next step</span><input className="input" value={c.next_step.text} onChange={(e) => setC({ ...c, next_step: { ...c.next_step, text: e.target.value } })} /></label>
+      <label className="grid gap-1"><span className="field-label">Suggested next step</span><input className="input" value={c.next_step.text} onChange={(e) => setC({ ...c, next_step: { ...c.next_step, text: e.target.value } })} /></label>
       {err && <p role="alert" className="text-sm text-bad">{err}</p>}
-      <button className="btn btn-primary w-fit" onClick={approve} disabled={busy}>{busy ? "Sending…" : "Approve and send to student"}</button>
+      <button className="btn btn-primary btn-lg w-fit" onClick={approve} disabled={busy}>{busy ? "Sending…" : <>Approve and send to student <Icon name="arrow-right" size={16} /></>}</button>
     </div>
   );
 }

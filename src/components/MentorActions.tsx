@@ -20,10 +20,10 @@ export function MentorActions({ token, meetingUrl, canMark, active }: { token: s
     <div className="grid gap-4">
       {active && (
         <form className="grid gap-2" onSubmit={(e) => { e.preventDefault(); post({ action: "meeting_url", url }, "Link saved - the student can see it now."); }}>
-          <label className="label" htmlFor="mu">Meeting link (Google Meet, Zoom, …)</label>
+          <label className="field-label" htmlFor="mu">Meeting link (Google Meet, Zoom, …)</label>
           <div className="flex gap-2">
             <input id="mu" className="input" type="url" placeholder="https://meet.google.com/…" value={url} onChange={(e) => setUrl(e.target.value)} required />
-            <button className="btn btn-primary" disabled={busy}>Save</button>
+            <button className="btn btn-primary shrink-0" disabled={busy}>Save</button>
           </div>
         </form>
       )}
@@ -33,7 +33,7 @@ export function MentorActions({ token, meetingUrl, canMark, active }: { token: s
           <button className="btn" disabled={busy} onClick={() => confirm("Mark the student as not attending?") && post({ action: "status", status: "no_show_student" })}>Student didn&apos;t attend</button>
         </div>
       )}
-      {msg && <p role="status" className="text-sm text-muted">{msg}</p>}
+      {msg && <p role="status" className="text-sm text-fg2 rounded-lg bg-accentsoft px-3 py-2">{msg}</p>}
     </div>
   );
 }
