@@ -9,7 +9,7 @@ const In = z.object({ text: z.string().min(1), kind: z.enum(["transcript", "debr
 export async function POST(req: Request, ctx: { params: Promise<{ id: string }> }) {
   const s = await studentOr401();
   if (s instanceof Response) return s;
-  if (limited(req, "transcript", 6)) return fail("Too many attempts. Please wait a minute.", 429);
+  if (await limited(req, "transcript", 6)) return fail("Too many attempts. Please wait a minute.", 429);
   const b = await getBooking((await ctx.params).id);
   if (!b || b.student_id !== s.id) return fail("Not found", 404);
   const p = In.safeParse(await body(req));

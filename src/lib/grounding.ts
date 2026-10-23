@@ -18,7 +18,10 @@ export function corpusFrom(...parts: string[]): Set<string> {
   const set = new Set<string>(ALLOW);
   for (const p of parts)
     for (const w of p.match(WORD) ?? [])
-      for (const piece of [w, ...w.split("-")]) (set.add(norm(piece)), set.add(norm(piece).replace(/s$/, "")));
+      for (const piece of [w, ...w.split("-")]) {
+        set.add(norm(piece));
+        set.add(norm(piece).replace(/s$/, ""));
+      }
   return set;
 }
 

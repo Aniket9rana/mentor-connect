@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "eslint",
     "ingest": "tsx scripts/ingest-mentors.ts",
-    "eval": "tsx --env-file=.env.local evals/run.ts"
+    "eval": "tsx --env-file=.env.local evals/run.ts",
+    "test": "tsx --test tests/*.test.ts",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@libsql/client": "^0.18.0",

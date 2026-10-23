@@ -199,3 +199,12 @@ p { text-wrap: pretty; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
+
+/* Print / "Save as PDF" of a write-up: drop chrome, flatten the cards, keep the content */
+@media print {
+  .no-print, .aurora { display: none !important; }
+  body { background: #fff !important; color: #000 !important; }
+  .card, .card-glow { box-shadow: none !important; background: #fff !important; border: 1px solid #ccc !important; break-inside: avoid; }
+  .print-keep { break-inside: avoid; }
+  a { text-decoration: none; color: inherit; }
+}

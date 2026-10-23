@@ -15,13 +15,13 @@
 ## Awkward cases handled (all in the eval suite)
 Vague input (≤2 questions, then it must recommend) · multiple problems · no match · crisis messages (resources, no mentor push, flagged) vs ordinary stress (not treated as a crisis) · prompt injection · fake/famous mentors · employer/phone questions · job-guarantee asks · rejection and refinement · Hinglish · slot collisions · cancel/reschedule/no-shows · too-short, garbled, small-talk and injected transcripts · PII in transcripts · LLM failures (retry, repair once, graceful message, state kept).
 
-**Evidence:** `npm run eval` runs 27 live checks (21 assistant, 6 summary) plus invariants on every reply (IDs exist, no contact strings, ≤3 picks). Last run: see `evals/REPORT.md`.
+**Evidence:** `npm run eval` runs 35 live checks (29 assistant, 6 summary) plus invariants on every reply (IDs exist, no contact strings, ≤3 picks). 8 of them score *relevance*: the picks must match the need on the mentor's own record (precision 96%, a good pick in 8/8 cases on the last run). `npm test` adds 26 deterministic tests, including the double-booking index and sign-in token rules. Last eval run: see `evals/REPORT.md`.
 
 ## Deliberately not built
-Real authentication (name + email for students, signed links for mentors, password for admin) · Calendar OAuth/availability sync · automatic call capture or transcription bot · payments · mentor onboarding/profile editing · vector search (unnecessary at 50 mentors; the path at scale is retrieval then rerank) · WhatsApp. Each costs more than it proves in a prototype.
+Accounts and passwords (students sign in with an emailed one-time link, mentors with signed links, admin with one password) · Calendar OAuth/availability sync (mentors set their own hours instead) · automatic call capture or transcription bot · payments · mentor onboarding/profile editing · vector search (unnecessary at 50 mentors; the path at scale is retrieval then rerank) · WhatsApp. Each costs more than it proves in a prototype.
 
 ## Assumptions
-- Mentor availability is **seeded** (stable weekly pattern per mentor in their city's time zone; the sheet has none). In production, mentors would own this.
+- Mentor availability starts **seeded** (stable weekly pattern per mentor in their city's time zone; the sheet has none) until the mentor sets their own hours on their private link.
 - A mentor's rating ("Quality of Mentorship") is Mesa's internal view; I show it only when present and use it as a tiebreaker, never as a guarantee.
 - English-first with light Hinglish; mentors are reachable through the private link rather than the sheet's placeholder emails.
 - The demo data (30 students) is flagged and removable; "Real only" filters it from every admin view.
@@ -30,4 +30,4 @@ Real authentication (name + email for students, signed links for mentors, passwo
 I used Claude Code to scaffold, write and test, but kept myself on the hard parts: the constraint design (IDs-not-facts), the data cleaning rules, and the eval cases. The evals caught real bugs: a crisis classifier that fired on "idk, everything", a grounding check that rejected "PM", and clarifying questions that weren't counted toward the cap.
 
 ## Known limits
-Responses take 5-20s (no streaming yet) · the grounding check is a heuristic, not a proof · rate limiting is per-instance memory · no mobile polish pass beyond responsive layout.
+Responses take 5-20s (no streaming yet, only staged progress text) · the grounding check is a heuristic, not a proof · sign-in is only verified when an email provider is configured · reminders are daily, not hourly · no mobile polish pass beyond responsive layout.

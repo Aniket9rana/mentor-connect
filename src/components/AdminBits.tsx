@@ -1,13 +1,14 @@
 import Link from "next/link";
-import type { Scope } from "@/lib/admin-stats";
+import type { Range, Scope } from "@/lib/admin-stats";
+import { Icon } from "./Icon";
 
-export function ScopeToggle({ scope, path }: { scope: Scope; path: string }) {
+export function ScopeToggle({ scope, path, range }: { scope: Scope; path: string; range?: Range }) {
   return (
     <div className="inline-flex gap-0.5 rounded-xl border border-line bg-surface2 p-0.5 text-sm" role="group" aria-label="Data scope">
       {(["all", "real", "demo"] as const).map((s) => (
         <Link
           key={s}
-          href={`${path}?scope=${s}`}
+          href={`${path}?scope=${s}${range && range !== "all" ? `&range=${range}` : ""}`}
           aria-current={scope === s}
           className={`rounded-[10px] px-3 py-1.5 font-medium transition-all ${scope === s ? "bg-surface text-fg shadow-[var(--shadow-sm)]" : "text-muted hover:text-fg"}`}
         >
@@ -16,6 +17,28 @@ export function ScopeToggle({ scope, path }: { scope: Scope; path: string }) {
       ))}
     </div>
   );
+}
+
+export function RangeToggle({ range, scope, path }: { range: Range; scope: Scope; path: string }) {
+  return (
+    <div className="inline-flex gap-0.5 rounded-xl border border-line bg-surface2 p-0.5 text-sm" role="group" aria-label="Date range">
+      {([["7d", "Last 7 days"], ["30d", "Last 30 days"], ["all", "All time"]] as const).map(([r, label]) => (
+        <Link
+          key={r}
+          href={`${path}?scope=${scope}${r === "all" ? "" : `&range=${r}`}`}
+          aria-current={range === r}
+          className={`rounded-[10px] px-3 py-1.5 font-medium transition-all ${range === r ? "bg-surface text-fg shadow-[var(--shadow-sm)]" : "text-muted hover:text-fg"}`}
+        >
+          {label}
+        </Link>
+      ))}
+    </div>
+  );
+}
+
+export function CsvLink({ table, scope, range }: { table: string; scope?: Scope; range?: Range }) {
+  const q = new URLSearchParams({ table, ...(scope ? { scope } : {}), ...(range && range !== "all" ? { range } : {}) });
+  return <a className="btn btn-sm" href={`/api/admin/export?${q}`}><Icon name="download" size={14} /> CSV</a>;
 }
 
 export function Bar({ label, value, max, suffix = "", sub }: { label: string; value: number; max: number; suffix?: string; sub?: string }) {

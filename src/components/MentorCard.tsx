@@ -2,8 +2,9 @@ import Link from "next/link";
 import type { Card } from "@/lib/assistant";
 import { Avatar } from "./Brand";
 import { Icon } from "./Icon";
+import { ShortlistButton } from "./ShortlistButton";
 
-export function MentorCard({ card, conversationId, rank }: { card: Card; conversationId?: string; rank: number }) {
+export function MentorCard({ card, conversationId, rank, saved = false, signedIn = true }: { card: Card; conversationId?: string; rank: number; saved?: boolean; signedIn?: boolean }) {
   const href = `/mentors/${card.mentorId}${conversationId ? `?c=${conversationId}` : ""}`;
   return (
     <article className="card card-lift p-5 flex flex-col gap-4 fade-up" style={{ animationDelay: `${rank * 70}ms` }}>
@@ -41,7 +42,10 @@ export function MentorCard({ card, conversationId, rank }: { card: Card; convers
           </div>
         ))}
       </dl>
-      <Link className="btn btn-primary w-full" href={href}>View &amp; book a call <Icon name="arrow-right" size={15} /></Link>
+      <div className="flex gap-2">
+        <Link className="btn btn-primary flex-1" href={href}>View &amp; book a call <Icon name="arrow-right" size={15} /></Link>
+        <ShortlistButton mentorId={card.mentorId} saved={saved} signedIn={signedIn} />
+      </div>
     </article>
   );
 }

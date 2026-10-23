@@ -46,7 +46,25 @@ const SCHEMA = [
   `CREATE TABLE IF NOT EXISTS emails (
      id TEXT PRIMARY KEY, ts TEXT NOT NULL, to_email TEXT NOT NULL, subject TEXT NOT NULL, body TEXT NOT NULL,
      kind TEXT NOT NULL, link TEXT, delivered INTEGER NOT NULL DEFAULT 0)`,
+  // sign-in links: only the hash of the token is stored
+  `CREATE TABLE IF NOT EXISTS login_tokens (
+     token_hash TEXT PRIMARY KEY, email TEXT NOT NULL, name TEXT NOT NULL, tz TEXT,
+     expires_at TEXT NOT NULL, used_at TEXT)`,
+  // real mentor mailboxes live ONLY here: never loaded into prompts, cards or student-facing pages
+  `CREATE TABLE IF NOT EXISTS mentor_contacts (mentor_id TEXT PRIMARY KEY, email TEXT NOT NULL, updated_at TEXT NOT NULL)`,
+  // mentor-owned availability; overrides the seeded weekly pattern. weekly = {"1":[18,19]} (local hours), blackout = ["2026-11-02"]
+  `CREATE TABLE IF NOT EXISTS mentor_availability (mentor_id TEXT PRIMARY KEY, weekly TEXT NOT NULL, blackout TEXT NOT NULL DEFAULT '[]', updated_at TEXT NOT NULL)`,
+  `CREATE TABLE IF NOT EXISTS waitlist (
+     id TEXT PRIMARY KEY, student_id TEXT NOT NULL, conversation_id TEXT NOT NULL, topic TEXT, unmet TEXT,
+     status TEXT NOT NULL DEFAULT 'waiting', created_at TEXT NOT NULL, notified_at TEXT)`,
+  `CREATE UNIQUE INDEX IF NOT EXISTS waitlist_conv ON waitlist(conversation_id)`,
+  `CREATE TABLE IF NOT EXISTS shortlist (student_id TEXT NOT NULL, mentor_id TEXT NOT NULL, created_at TEXT NOT NULL, PRIMARY KEY (student_id, mentor_id))`,
+  `CREATE TABLE IF NOT EXISTS rate_hits (key TEXT NOT NULL, ts INTEGER NOT NULL)`,
+  `CREATE INDEX IF NOT EXISTS rate_hits_key ON rate_hits(key, ts)`,
 ];
+
+// Columns added after first release. CREATE TABLE IF NOT EXISTS won't add them to an existing (e.g. Turso) database.
+const MIGRATIONS = [`ALTER TABLE bookings ADD COLUMN reminded INTEGER NOT NULL DEFAULT 0`];
 
 type G = typeof globalThis & { __mc?: { client: Client; ready: Promise<void> } };
 const g = globalThis as G;
@@ -63,6 +81,13 @@ async function init(client: Client) {
     await client.execute("PRAGMA journal_mode = WAL");
   }
   for (const stmt of SCHEMA) await client.execute(stmt);
+  for (const stmt of MIGRATIONS) {
+    try {
+      await client.execute(stmt);
+    } catch (e) {
+      if (!/duplicate column/i.test(String((e as Error).message))) throw e;
+    }
+  }
   const n = await client.execute("SELECT COUNT(*) AS n FROM mentors");
   if (Number(n.rows[0].n) === 0) {
     await client.batch(

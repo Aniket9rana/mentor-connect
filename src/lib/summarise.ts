@@ -4,7 +4,8 @@ import { completeJSON, LlmError } from "./llm";
 import { getMentor } from "./mentors";
 import { appUrl, sendEmail } from "./email";
 import { flag, track } from "./events";
-import { getBooking, mentorMailbox, type Booking } from "./booking";
+import { getBooking, type Booking } from "./booking";
+import { mentorEmail } from "./contacts";
 
 export const TRANSCRIPT_MAX = 60_000;
 export const REVIEW_WINDOW_MS = 48 * 3600_000;
@@ -147,7 +148,7 @@ export async function submitTranscript(o: { booking: Booking; text: string; by: 
     return { ok: true, status: "released", summaryId: sid, lowConfidence };
   }
   await sendEmail({
-    to: mentorMailbox(b.mentor_id), kind: "mentor_review", link: `${appUrl()}/mentor/${b.mentor_token}`,
+    to: await mentorEmail(b.mentor_id), kind: "mentor_review", link: `${appUrl()}/mentor/${b.mentor_token}`,
     subject: `Please review the write-up for your call with ${student?.name}`,
     body: `A write-up of your call was drafted from the transcript. Please check it (and edit anything that's off) - it goes to the student when you approve, or automatically after 48 hours marked as not reviewed.`,
   });

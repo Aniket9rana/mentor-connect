@@ -10,7 +10,7 @@ const In = z.object({ conversationId: z.string().nullish(), message: z.string().
 export async function POST(req: Request) {
   const s = await studentOr401();
   if (s instanceof Response) return s;
-  if (limited(req, "chat-ip", 40) || !allow(`chat-stu:${s.id}`, 20, 60_000)) return fail("You're sending messages quickly - give it a few seconds.", 429);
+  if (await limited(req, "chat-ip", 40) || !(await allow(`chat-stu:${s.id}`, 20, 60_000))) return fail("You're sending messages quickly - give it a few seconds.", 429);
   const p = In.safeParse(await body(req));
   if (!p.success) return fail(p.error.issues[0]?.message ?? "Invalid message.");
   if (p.data.message.length > LIMITS.messageChars) return fail(`Please keep messages under ${LIMITS.messageChars} characters.`, 413);

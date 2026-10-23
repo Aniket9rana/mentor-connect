@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import { Icon } from "./Icon";
 
 const TABS = [
-  ["/admin", "Overview", "bar-chart"], ["/admin/demand", "Demand & gaps", "trending-up"], ["/admin/mentors", "Mentors", "users"],
+  ["/admin", "Overview", "bar-chart"], ["/admin/demand", "Demand & gaps", "trending-up"], ["/admin/mentors", "Mentors", "users"], ["/admin/bookings", "Bookings", "calendar"],
   ["/admin/quality", "Quality & safety", "shield-check"], ["/admin/conversations", "Conversations", "message"], ["/admin/outbox", "Emails", "mail"],
 ] as const;
 

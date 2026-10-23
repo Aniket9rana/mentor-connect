@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import type { ChatMessage } from "@/lib/assistant";
 import { MentorCard } from "./MentorCard";
 import { Icon } from "./Icon";
+import { WaitlistButton } from "./WaitlistButton";
 
 const SUGGESTIONS = [
   { icon: "compass", label: "Switch into product", text: "I'm a final-year student and want to move into product management, but I have no tech background." },
@@ -12,13 +13,14 @@ const SUGGESTIONS = [
 ] as const;
 const STAGES = ["Reading your message…", "Looking through our mentor list…", "Checking who really fits…", "Writing up why…"];
 
-export function Chat({ initial, conversationId: initialId, prefill }: { initial: ChatMessage[]; conversationId: string | null; prefill?: string }) {
+export function Chat({ initial, conversationId: initialId, prefill, savedIds = [], waitlisted = false, signedIn = true }: { initial: ChatMessage[]; conversationId: string | null; prefill?: string; savedIds?: string[]; waitlisted?: boolean; signedIn?: boolean }) {
   const [messages, setMessages] = useState<ChatMessage[]>(initial);
   const [cid, setCid] = useState<string | null>(initialId);
   const [text, setText] = useState(prefill ?? "");
   const [busy, setBusy] = useState(false);
   const [stage, setStage] = useState(0);
   const [err, setErr] = useState("");
+  const lastRecommendId = [...messages].reverse().find((x) => x.kind === "recommend")?.id;
   const endRef = useRef<HTMLDivElement>(null);
   const taRef = useRef<HTMLTextAreaElement>(null);
 
@@ -27,7 +29,6 @@ export function Chat({ initial, conversationId: initialId, prefill }: { initial:
   }, [messages, busy]);
   useEffect(() => {
     if (!busy) return;
-    setStage(0);
     const t = setInterval(() => setStage((s) => Math.min(s + 1, STAGES.length - 1)), 3500);
     return () => clearInterval(t);
   }, [busy]);
@@ -42,6 +43,7 @@ export function Chat({ initial, conversationId: initialId, prefill }: { initial:
     const m = msg.trim();
     if (!m || busy) return;
     setErr("");
+    setStage(0);
     setBusy(true);
     setText("");
     setMessages((cur) => [...cur, { id: `tmp_${Date.now()}`, role: "user", content: m, kind: "user", createdAt: new Date().toISOString() }]);
@@ -105,10 +107,13 @@ export function Chat({ initial, conversationId: initialId, prefill }: { initial:
                       : "These mentors cover part of what you described, not all of it."}
                   </p>
                 )}
+                {m.kind === "recommend" && m.matchQuality && m.matchQuality !== "strong" && cid && m.id === lastRecommendId && (
+                  <WaitlistButton conversationId={cid} joined={waitlisted} />
+                )}
                 {m.cards && m.cards.length > 0 && (
                   <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
                     {m.cards.map((c, i) => (
-                      <MentorCard key={c.mentorId} card={c} rank={i + 1} conversationId={cid ?? undefined} />
+                      <MentorCard key={c.mentorId} card={c} rank={i + 1} conversationId={cid ?? undefined} saved={savedIds.includes(c.mentorId)} signedIn={signedIn} />
                     ))}
                   </div>
                 )}

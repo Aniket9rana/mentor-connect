@@ -1,11 +1,16 @@
 import Link from "next/link";
-import { demand, parseScope } from "@/lib/admin-stats";
-import { Bar, ScopeToggle, Stat } from "@/components/AdminBits";
+import { demand, parseRange, parseScope, sinceOf } from "@/lib/admin-stats";
+import { listWaitlist } from "@/lib/waitlist";
+import { NotifyButton } from "@/components/AdminActions";
+import { Bar, CsvLink, RangeToggle, ScopeToggle, Stat } from "@/components/AdminBits";
 import { LocalTime } from "@/components/LocalTime";
 
-export default async function Demand({ searchParams }: { searchParams: Promise<{ scope?: string }> }) {
-  const scope = parseScope((await searchParams).scope);
-  const d = await demand(scope);
+export default async function Demand({ searchParams }: { searchParams: Promise<{ scope?: string; range?: string }> }) {
+  const sp = await searchParams;
+  const scope = parseScope(sp.scope);
+  const range = parseRange(sp.range);
+  const d = await demand(scope, sinceOf(range));
+  const waitlist = await listWaitlist(scope);
   const maxPer = Math.max(0.01, ...d.byDomain.map((x) => x.recs / Math.max(1, x.mentors)));
   return (
     <div className="grid gap-8">
@@ -14,7 +19,7 @@ export default async function Demand({ searchParams }: { searchParams: Promise<{
           <h1 className="text-2xl sm:text-[1.7rem] font-semibold tracking-tight">Demand &amp; gaps</h1>
           <p className="text-muted text-sm">What students ask for that the mentor list can&apos;t fully serve. This is the recruiting brief.</p>
         </div>
-        <div className="ml-auto"><ScopeToggle scope={scope} path="/admin/demand" /></div>
+        <div className="ml-auto flex gap-2 flex-wrap"><RangeToggle range={range} scope={scope} path="/admin/demand" /><ScopeToggle scope={scope} path="/admin/demand" range={range} /></div>
       </header>
 
       <section className="grid grid-cols-3 gap-3">
@@ -52,6 +57,30 @@ export default async function Demand({ searchParams }: { searchParams: Promise<{
             </tbody>
           </table>
         </div>
+      </section>
+
+      <section className="grid gap-3">
+        <div className="flex items-center gap-3">
+          <h2 className="text-base font-semibold tracking-tight">Waitlist</h2>
+          <span className="text-sm text-muted">Students who asked to hear when we add mentors for what they needed.</span>
+          <span className="ml-auto"><CsvLink table="waitlist" scope={scope} /></span>
+        </div>
+        {waitlist.length === 0 && <p className="text-sm text-muted">Nobody is waiting.</p>}
+        {waitlist.map((w) => (
+          <article key={w.id} className="card p-4 flex gap-3 items-start flex-wrap">
+            <div className="grid gap-0.5 min-w-0 flex-1">
+              <div className="flex gap-2 items-center flex-wrap">
+                <span className="font-medium">{w.name}</span>
+                <span className={`badge ${w.status === "waiting" ? "badge-warn" : "badge-ok"}`}>{w.status === "waiting" ? "Waiting" : "Notified"}</span>
+                {w.is_demo ? <span className="badge">demo</span> : null}
+                <span className="text-xs text-muted"><LocalTime iso={w.created_at} /></span>
+              </div>
+              <p className="text-sm">{w.unmet || w.topic || "—"}</p>
+              <Link className="text-xs underline w-fit" href={`/admin/conversations/${w.conversation_id}`}>View conversation</Link>
+            </div>
+            {w.status === "waiting" && <NotifyButton id={w.id} />}
+          </article>
+        ))}
       </section>
 
       <section className="grid gap-3">

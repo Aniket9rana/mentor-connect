@@ -11,7 +11,7 @@ export async function adminOr401(): Promise<true | Response> {
   return (await isAdmin()) ? true : fail("Admin only.", 401);
 }
 export const ipOf = (req: Request) => req.headers.get("x-forwarded-for")?.split(",")[0].trim() ?? "local";
-export const limited = (req: Request, scope: string, max: number, windowMs = 60_000) => !allow(`${scope}:${ipOf(req)}`, max, windowMs);
+export const limited = async (req: Request, scope: string, max: number, windowMs = 60_000) => !(await allow(`${scope}:${ipOf(req)}`, max, windowMs));
 export const body = async <T = Record<string, unknown>>(req: Request): Promise<T> => {
   try {
     return (await req.json()) as T;

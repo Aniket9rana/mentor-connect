@@ -6,34 +6,48 @@ export const parseScope = (v?: string): Scope => (v === "real" || v === "demo" ?
 /** SQL predicate limiting a student_id column to the chosen scope. */
 const sf = (scope: Scope, col = "student_id") => (scope === "all" ? "1=1" : `${col} IN (SELECT id FROM students WHERE is_demo = ${scope === "demo" ? 1 : 0})`);
 
+export type Range = "all" | "7d" | "30d";
+export const parseRange = (v?: string): Range => (v === "7d" || v === "30d" ? v : "all");
+/** ISO lower bound for the chosen window, or null for all time. */
+export const sinceOf = (r: Range, at = Date.now()): string | null => (r === "all" ? null : new Date(at - (r === "7d" ? 7 : 30) * 86400_000).toISOString());
+/** `AND col >= ?` when a window is set. Returns [sql, args]. */
+const win = (col: string, since: string | null): [string, string[]] => (since ? [` AND ${col} >= ?`, [since]] : ["", []]);
+
 const n = async (sql: string, args: (string | number)[] = []) => Number((await one<{ n: number }>(sql, args))?.n ?? 0);
 
-export async function funnel(scope: Scope) {
-  const ev = (t: string) => n(`SELECT COUNT(DISTINCT student_id) AS n FROM events WHERE type = ? AND ${sf(scope)}`, [t]);
+export async function funnel(scope: Scope, since: string | null = null) {
+  const [we, ae] = win("ts", since);
+  const [wb, ab] = win("created_at", since);
+  const [ws, as_] = win("s.created_at", since);
+  const ev = (t: string) => n(`SELECT COUNT(DISTINCT student_id) AS n FROM events WHERE type = ? AND ${sf(scope)}${we}`, [t, ...ae]);
   const steps = [
     { key: "Started a chat", v: await ev("chat_started") },
     { key: "Got mentor recommendations", v: await ev("recommended") },
     { key: "Viewed a mentor", v: await ev("mentor_viewed") },
-    { key: "Booked a call", v: await n(`SELECT COUNT(DISTINCT student_id) AS n FROM bookings WHERE ${sf(scope)}`) },
-    { key: "Call took place", v: await n(`SELECT COUNT(DISTINCT student_id) AS n FROM bookings WHERE status = 'completed' AND ${sf(scope)}`) },
-    { key: "Received a write-up", v: await n(`SELECT COUNT(DISTINCT b.student_id) AS n FROM summaries s JOIN bookings b ON b.id = s.booking_id WHERE s.status != 'draft' AND ${sf(scope, "b.student_id")}`) },
+    { key: "Booked a call", v: await n(`SELECT COUNT(DISTINCT student_id) AS n FROM bookings WHERE ${sf(scope)}${wb}`, ab) },
+    { key: "Call took place", v: await n(`SELECT COUNT(DISTINCT student_id) AS n FROM bookings WHERE status = 'completed' AND ${sf(scope)}${wb}`, ab) },
+    { key: "Received a write-up", v: await n(`SELECT COUNT(DISTINCT b.student_id) AS n FROM summaries s JOIN bookings b ON b.id = s.booking_id WHERE s.status != 'draft' AND ${sf(scope, "b.student_id")}${ws}`, as_) },
     { key: "Completed an action item", v: await ev("action_item_done") },
   ];
   return steps;
 }
 
-export async function kpis(scope: Scope) {
-  const bookings = await n(`SELECT COUNT(*) AS n FROM bookings WHERE ${sf(scope)}`);
-  const held = await n(`SELECT COUNT(*) AS n FROM bookings WHERE status = 'completed' AND ${sf(scope)}`);
-  const noShows = await n(`SELECT COUNT(*) AS n FROM bookings WHERE status IN ('no_show_student','no_show_mentor') AND ${sf(scope)}`);
-  const cancelled = await n(`SELECT COUNT(*) AS n FROM bookings WHERE status = 'cancelled' AND ${sf(scope)}`);
-  const rating = await one<{ r: number | null; c: number }>(`SELECT AVG(rating) AS r, COUNT(*) AS c FROM feedback WHERE ${sf(scope)}`);
-  const items = await one<{ done: number; total: number }>(`SELECT COALESCE(SUM(done),0) AS done, COUNT(*) AS total FROM action_items WHERE ${sf(scope)}`);
+export async function kpis(scope: Scope, since: string | null = null) {
+  const [wb, ab] = win("created_at", since);
+  const [wf, af] = win("created_at", since);
+  const [ws, as_] = win("s.created_at", since);
+  const [wsa, asa] = win("sm.created_at", since);
+  const bookings = await n(`SELECT COUNT(*) AS n FROM bookings WHERE ${sf(scope)}${wb}`, ab);
+  const held = await n(`SELECT COUNT(*) AS n FROM bookings WHERE status = 'completed' AND ${sf(scope)}${wb}`, ab);
+  const noShows = await n(`SELECT COUNT(*) AS n FROM bookings WHERE status IN ('no_show_student','no_show_mentor') AND ${sf(scope)}${wb}`, ab);
+  const cancelled = await n(`SELECT COUNT(*) AS n FROM bookings WHERE status = 'cancelled' AND ${sf(scope)}${wb}`, ab);
+  const rating = await one<{ r: number | null; c: number }>(`SELECT AVG(rating) AS r, COUNT(*) AS c FROM feedback WHERE ${sf(scope)}${wf}`, af);
+  const items = await one<{ done: number; total: number }>(`SELECT COALESCE(SUM(a.done),0) AS done, COUNT(*) AS total FROM action_items a JOIN summaries sm ON sm.id = a.summary_id WHERE ${sf(scope, "a.student_id")}${wsa}`, asa);
   const lag = await one<{ h: number | null }>(
-    `SELECT AVG((julianday(s.released_at) - julianday(s.created_at)) * 24) AS h FROM summaries s JOIN bookings b ON b.id = s.booking_id WHERE s.released_at IS NOT NULL AND ${sf(scope, "b.student_id")}`);
-  const released = await n(`SELECT COUNT(*) AS n FROM summaries s JOIN bookings b ON b.id = s.booking_id WHERE s.status != 'draft' AND ${sf(scope, "b.student_id")}`);
-  const unreviewed = await n(`SELECT COUNT(*) AS n FROM summaries s JOIN bookings b ON b.id = s.booking_id WHERE s.status = 'auto_released' AND ${sf(scope, "b.student_id")}`);
-  const students = await n(`SELECT COUNT(*) AS n FROM students WHERE ${scope === "all" ? "1=1" : `is_demo = ${scope === "demo" ? 1 : 0}`}`);
+    `SELECT AVG((julianday(s.released_at) - julianday(s.created_at)) * 24) AS h FROM summaries s JOIN bookings b ON b.id = s.booking_id WHERE s.released_at IS NOT NULL AND ${sf(scope, "b.student_id")}${ws}`, as_);
+  const released = await n(`SELECT COUNT(*) AS n FROM summaries s JOIN bookings b ON b.id = s.booking_id WHERE s.status != 'draft' AND ${sf(scope, "b.student_id")}${ws}`, as_);
+  const unreviewed = await n(`SELECT COUNT(*) AS n FROM summaries s JOIN bookings b ON b.id = s.booking_id WHERE s.status = 'auto_released' AND ${sf(scope, "b.student_id")}${ws}`, as_);
+  const students = await n(`SELECT COUNT(*) AS n FROM students WHERE ${scope === "all" ? "1=1" : `is_demo = ${scope === "demo" ? 1 : 0}`}${wb}`, ab);
   const demoStudents = await n("SELECT COUNT(*) AS n FROM students WHERE is_demo = 1");
   const totalStudents = await n("SELECT COUNT(*) AS n FROM students");
   return {
@@ -46,8 +60,9 @@ export async function kpis(scope: Scope) {
 }
 
 type EvRow = { ts: string; type: string; conversation_id: string | null; student_id: string | null; meta: string };
-export async function demand(scope: Scope) {
-  const rows = await all<EvRow>(`SELECT ts, type, conversation_id, student_id, meta FROM events WHERE type IN ('no_match','recommended') AND ${sf(scope)} ORDER BY ts DESC`);
+export async function demand(scope: Scope, since: string | null = null) {
+  const [w, wa] = win("ts", since);
+  const rows = await all<EvRow>(`SELECT ts, type, conversation_id, student_id, meta FROM events WHERE type IN ('no_match','recommended') AND ${sf(scope)}${w} ORDER BY ts DESC`, wa);
   const parsed = rows.map((r) => ({ ...r, meta: JSON.parse(r.meta || "{}") as { quality?: string; topic?: string; tags?: string[]; unmet?: string | null; mentors?: string[] } }));
   const gaps = parsed.filter((r) => r.type === "no_match" || r.meta.quality === "partial");
   const tagCount = new Map<string, number>();

@@ -9,6 +9,7 @@ export function StartForm({ compact = false }: { compact?: boolean }) {
   const [email, setEmail] = useState("");
   const [err, setErr] = useState("");
   const [busy, setBusy] = useState(false);
+  const [sent, setSent] = useState(false);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -19,6 +20,11 @@ export function StartForm({ compact = false }: { compact?: boolean }) {
       const r = await fetch("/api/session", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ name, email, tz }) });
       const j = await r.json();
       if (!j.ok) throw new Error(j.message);
+      if (j.mode === "email") {
+        setSent(true);
+        setBusy(false);
+        return;
+      }
       router.push("/chat");
       router.refresh();
     } catch (e) {
@@ -27,12 +33,22 @@ export function StartForm({ compact = false }: { compact?: boolean }) {
     }
   }
 
+  if (sent)
+    return (
+      <div className={`grid gap-3 w-full scroll-mt-24 ${compact ? "" : "card-glow p-6 sm:p-7"}`} id="start" role="status">
+        <span className="grid place-items-center h-10 w-10 rounded-xl bg-accentsoft text-accentink"><Icon name="mail" size={18} /></span>
+        <h2 className="text-xl font-semibold tracking-tight">Check your email</h2>
+        <p className="text-sm text-muted leading-relaxed">We sent a sign-in link to <strong className="text-fg">{email}</strong>. It works once and expires in 20 minutes. Check spam if it doesn&apos;t show up.</p>
+        <button type="button" className="btn btn-ghost btn-sm w-fit" onClick={() => setSent(false)}>Use a different email</button>
+      </div>
+    );
+
   return (
     <form onSubmit={submit} className={`grid gap-4 w-full scroll-mt-24 ${compact ? "" : "card-glow p-6 sm:p-7"}`} id="start">
       {!compact && (
         <div className="grid gap-1">
           <h2 className="text-xl font-semibold tracking-tight">Start in 30 seconds</h2>
-          <p className="text-sm text-muted">No password. Use the same email later to pick up where you left off.</p>
+          <p className="text-sm text-muted">No password. We may email you a one-time link to confirm it&apos;s you; use the same email later to pick up where you left off.</p>
         </div>
       )}
       <label className="grid gap-1.5">

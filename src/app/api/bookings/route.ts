@@ -8,7 +8,7 @@ const In = z.object({ mentorId: z.string(), slotStart: z.string().datetime(), co
 export async function POST(req: Request) {
   const s = await studentOr401();
   if (s instanceof Response) return s;
-  if (limited(req, "book", 15)) return fail("Too many attempts. Please wait a minute.", 429);
+  if (await limited(req, "book", 15)) return fail("Too many attempts. Please wait a minute.", 429);
   const p = In.safeParse(await body(req));
   if (!p.success) return fail("Please pick a time slot.");
   const r = await createBooking({ student: s, mentorId: p.data.mentorId.toUpperCase(), slotStart: p.data.slotStart, conversationId: p.data.conversationId, rescheduleOf: p.data.rescheduleOf });

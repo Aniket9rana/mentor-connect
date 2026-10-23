@@ -20,7 +20,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable} ${instrument.variable} antialiased`}>
       <body className="min-h-screen flex flex-col">
-        <header className="sticky top-0 z-30 border-b border-line/70 bg-bg/75 backdrop-blur-xl backdrop-saturate-150">
+        <header className="no-print sticky top-0 z-30 border-b border-line/70 bg-bg/75 backdrop-blur-xl backdrop-saturate-150">
           <div className="mx-auto max-w-6xl px-4 sm:px-6 h-16 flex items-center gap-3 sm:gap-6">
             <Link href="/" aria-label="Mentor Connect home" className="rounded-lg"><Wordmark compact={!!student} /></Link>
             {student && <NavLinks />}
@@ -40,7 +40,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           </div>
         </header>
         <main className="flex-1">{children}</main>
-        <footer className="border-t border-line/70">
+        <footer className="no-print border-t border-line/70">
           <div className="mx-auto max-w-6xl px-4 sm:px-6 py-8 grid gap-6 sm:grid-cols-[1fr_auto] items-start text-sm text-muted">
             <div className="grid gap-2 max-w-md">
               <Wordmark />

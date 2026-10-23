@@ -4,7 +4,7 @@ import { COOKIE_OPTS, sign } from "@/lib/session";
 import { body, fail, json, limited } from "@/lib/http";
 
 export async function POST(req: Request) {
-  if (limited(req, "admin-login", 8, 5 * 60_000)) return fail("Too many attempts. Try again in a few minutes.", 429);
+  if (await limited(req, "admin-login", 8, 5 * 60_000)) return fail("Too many attempts. Try again in a few minutes.", 429);
   const { password } = await body<{ password?: string }>(req);
   const expected = process.env.ADMIN_PASSWORD;
   const a = Buffer.from(password ?? "");

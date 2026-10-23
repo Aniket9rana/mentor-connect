@@ -5,6 +5,8 @@ import { getMentor } from "./mentors";
 import { candidateSlots, openSlots, SLOT_MIN } from "./slots";
 import { loadMessages } from "./assistant";
 import { appUrl, sendEmail } from "./email";
+import { mentorEmail } from "./contacts";
+import { formatWhen } from "./format";
 import { flag, track } from "./events";
 import type { Student } from "./session";
 
@@ -16,10 +18,13 @@ export type Booking = {
 };
 
 export const CANCEL_CUTOFF_MS = 2 * 3600_000;
-export const mentorMailbox = (id: string) => `${id.toLowerCase()}@mentors.demo.mentorconnect.test`;
 
 export const getBooking = (id: string) => one<Booking>("SELECT * FROM bookings WHERE id = ?", [id]);
 export const bookingByToken = (t: string) => one<Booking>("SELECT * FROM bookings WHERE mentor_token = ?", [t]);
+
+/** Mentor links stay valid for 30 days after the call, long enough to review a write-up, then stop working. */
+export const MENTOR_LINK_GRACE_MS = 30 * 86400_000;
+export const mentorLinkExpired = (b: Pick<Booking, "slot_start">, at = Date.now()) => new Date(b.slot_start).getTime() + MENTOR_LINK_GRACE_MS < at;
 
 const Brief = z.object({
   problem: z.string().describe("What the student is stuck on, 1-2 sentences, third person"),
@@ -67,7 +72,7 @@ export async function createBooking(o: { student: Student; mentorId: string; slo
 
   // only slots the system actually offers can be booked (guards against tampered requests too)
   const slotIso = new Date(o.slotStart).toISOString();
-  if (!candidateSlots(mentor).includes(slotIso)) return { ok: false, code: "invalid_slot", message: "That time isn't available any more.", slots: await openSlots(mentor) };
+  if (!(await candidateSlots(mentor)).includes(slotIso)) return { ok: false, code: "invalid_slot", message: "That time isn't available any more.", slots: await openSlots(mentor) };
 
   const clash = await one(
     "SELECT id FROM bookings WHERE student_id = ? AND status = 'confirmed' AND slot_start = ? AND id != ?",
@@ -101,12 +106,12 @@ export async function createBooking(o: { student: Student; mentorId: string; slo
   await sendEmail({
     to: o.student.email, kind: "booking_confirmation", link: `${appUrl()}/bookings/${id}`,
     subject: `Your call with ${mentor.name} is confirmed`,
-    body: `Hi ${o.student.name},\n\nYour call with ${mentor.name} is booked for ${slotIso} (UTC; the app shows it in your local time). Add it to your calendar and keep your questions handy.\n\nAfter the call you'll get a written summary with next steps.`,
+    body: `Hi ${o.student.name},\n\nYour call with ${mentor.name} is booked for ${formatWhen(slotIso, { tz: o.student.tz })}. Add it to your calendar and keep your questions handy.\n\nAfter the call you'll get a written summary with next steps.`,
   });
   await sendEmail({
-    to: mentorMailbox(mentor.id), kind: "mentor_new_booking", link: `${appUrl()}/mentor/${mtoken}`,
+    to: await mentorEmail(mentor.id), kind: "mentor_new_booking", link: `${appUrl()}/mentor/${mtoken}`,
     subject: `New call booked with ${o.student.name}`,
-    body: `A student booked a ${SLOT_MIN}-minute call with you for ${slotIso} (UTC).\n\nBrief:\n${brief || "(none provided)"}\n\nUse the link to add your meeting link, mark the call done and review the write-up.`,
+    body: `A student booked a ${SLOT_MIN}-minute call with you for ${formatWhen(slotIso, { offsetMin: mentor.utcOffsetMin })}.\n\nBrief:\n${brief || "(none provided)"}\n\nUse the link to add your meeting link, mark the call done and review the write-up.`,
   });
   return { ok: true, booking };
 }
@@ -117,8 +122,8 @@ export async function cancelBooking(b: Booking, student: Student): Promise<{ ok:
   await run("UPDATE bookings SET status = 'cancelled', updated_at = ? WHERE id = ?", [now(), b.id]);
   await track("booking_cancelled", { studentId: student.id, bookingId: b.id }, { reason: "student" });
   const m = await getMentor(b.mentor_id);
-  await sendEmail({ to: mentorMailbox(b.mentor_id), kind: "mentor_cancelled", subject: `Call cancelled: ${student.name}`, body: `${student.name} cancelled the call scheduled for ${b.slot_start} (UTC). The slot is open again.` });
-  await sendEmail({ to: student.email, kind: "booking_cancelled", subject: `Call with ${m?.name ?? "mentor"} cancelled`, body: `Your call on ${b.slot_start} (UTC) is cancelled. You can pick another mentor or time any time.`, link: `${appUrl()}/chat` });
+  await sendEmail({ to: await mentorEmail(b.mentor_id), kind: "mentor_cancelled", subject: `Call cancelled: ${student.name}`, body: `${student.name} cancelled the call scheduled for ${formatWhen(b.slot_start, { offsetMin: m?.utcOffsetMin ?? 0 })}. The slot is open again.` });
+  await sendEmail({ to: student.email, kind: "booking_cancelled", subject: `Call with ${m?.name ?? "mentor"} cancelled`, body: `Your call on ${formatWhen(b.slot_start, { tz: student.tz })} is cancelled. You can pick another mentor or time any time.`, link: `${appUrl()}/chat` });
   return { ok: true };
 }
 
@@ -139,4 +144,33 @@ export async function markStatus(b: Booking, status: "completed" | "no_show_stud
 
 export async function studentBookings(studentId: string) {
   return all<Booking>("SELECT * FROM bookings WHERE student_id = ? ORDER BY slot_start DESC", [studentId]);
+}
+
+/**
+ * Reminder to both sides for calls starting within the next 30 hours that haven't been reminded yet.
+ * The daily cron runs once a day, so this is a "tomorrow" reminder; run the cron hourly for a "1 hour before" one.
+ */
+export async function sendReminders(): Promise<number> {
+  const until = new Date(Date.now() + 30 * 3600_000).toISOString();
+  const due = await all<Booking & { name: string; email: string; tz: string | null }>(
+    `SELECT b.*, s.name, s.email, s.tz FROM bookings b JOIN students s ON s.id = b.student_id
+      WHERE b.status = 'confirmed' AND b.reminded = 0 AND b.slot_start > ? AND b.slot_start <= ?`,
+    [now(), until],
+  );
+  for (const b of due) {
+    const m = await getMentor(b.mentor_id);
+    const link = b.meeting_url ? `Meeting link: ${b.meeting_url}` : "Your mentor hasn't added a meeting link yet - check your booking page before the call.";
+    await sendEmail({
+      to: b.email, kind: "reminder", link: `${appUrl()}/bookings/${b.id}`,
+      subject: `Reminder: your call with ${m?.name ?? "your mentor"}`,
+      body: `Hi ${b.name},\n\nYour call is coming up on ${formatWhen(b.slot_start, { tz: b.tz })}.\n${link}\n\nHave your questions ready.`,
+    });
+    await sendEmail({
+      to: await mentorEmail(b.mentor_id), kind: "mentor_reminder", link: `${appUrl()}/mentor/${b.mentor_token}`,
+      subject: `Reminder: call with ${b.name}`,
+      body: `Your call with ${b.name} is on ${formatWhen(b.slot_start, { offsetMin: m?.utcOffsetMin ?? 0 })}.\n${b.meeting_url ? `Meeting link on file: ${b.meeting_url}` : "Please add a meeting link on your portal page."}`,
+    });
+    await run("UPDATE bookings SET reminded = 1 WHERE id = ?", [b.id]);
+  }
+  return due.length;
 }

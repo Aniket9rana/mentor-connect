@@ -4,6 +4,8 @@ import { openSlots } from "@/lib/slots";
 import { currentStudent } from "@/lib/session";
 import { getBooking } from "@/lib/booking";
 import { track } from "@/lib/events";
+import { shortlistIds } from "@/lib/shortlist";
+import { ShortlistButton } from "@/components/ShortlistButton";
 import { SlotPicker } from "@/components/SlotPicker";
 import { StartForm } from "@/components/StartForm";
 import { Avatar } from "@/components/Brand";
@@ -22,6 +24,7 @@ export default async function MentorPage({ params, searchParams }: { params: Pro
   const student = await currentStudent();
   const old = student && sp.reschedule ? await getBooking(sp.reschedule) : undefined;
   const rescheduleOf = old && old.student_id === student?.id && old.status === "confirmed" ? old.id : undefined;
+  const saved = student ? (await shortlistIds(student.id)).includes(m.id) : false;
   if (student) await track("mentor_viewed", { studentId: student.id, conversationId: sp.c }, { mentor: m.id });
 
   return (
@@ -36,7 +39,8 @@ export default async function MentorPage({ params, searchParams }: { params: Pro
               <div className="grid gap-2 min-w-0 pt-1">
                 <h1 className="font-display text-4xl sm:text-5xl leading-[1.05]">{m.name}</h1>
                 <p className="text-muted leading-relaxed">{headline(m)}</p>
-                <div className="flex gap-2 flex-wrap pt-1">
+                <div className="flex gap-2 flex-wrap pt-1 items-center">
+                  {student && <ShortlistButton mentorId={m.id} saved={saved} compact />}
                   {m.mentorshipQuality && <span className="badge badge-ok"><Icon name="star" size={11} /> Mentorship rated {m.mentorshipQuality}</span>}
                   {m.profile === "thin" && <span className="badge badge-warn"><Icon name="alert" size={11} /> Limited details on file</span>}
                 </div>

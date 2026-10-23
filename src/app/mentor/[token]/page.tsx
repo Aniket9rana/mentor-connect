@@ -1,5 +1,8 @@
 import { notFound } from "next/navigation";
-import { bookingByToken } from "@/lib/booking";
+import { bookingByToken, mentorLinkExpired } from "@/lib/booking";
+import { nowMs } from "@/lib/clock";
+import { availabilityFor } from "@/lib/slots";
+import { AvailabilityEditor } from "@/components/AvailabilityEditor";
 import { getMentor } from "@/lib/mentors";
 import { one } from "@/lib/db";
 import { getSummary, REVIEW_WINDOW_MS } from "@/lib/summarise";
@@ -17,10 +20,18 @@ export default async function MentorPortal({ params }: { params: Promise<{ token
   const token = (await params).token;
   const b = await bookingByToken(token);
   if (!b) notFound();
+  if (mentorLinkExpired(b))
+    return (
+      <div className="mx-auto max-w-md px-4 py-16 grid gap-3 text-center">
+        <h1 className="font-display text-4xl">This link has expired</h1>
+        <p className="text-muted text-sm leading-relaxed">Mentor links work for 30 days after the call. Ask the Mesa team to send you a fresh one.</p>
+      </div>
+    );
   const m = await getMentor(b.mentor_id);
+  const av = m ? await availabilityFor(m) : null;
   const student = await one<{ name: string }>("SELECT name FROM students WHERE id = ?", [b.student_id]);
   const s = await getSummary(b.id);
-  const past = new Date(b.slot_start).getTime() <= Date.now();
+  const past = new Date(b.slot_start).getTime() <= nowMs();
   const active = b.status === "confirmed";
 
   return (
@@ -66,6 +77,15 @@ export default async function MentorPortal({ params }: { params: Promise<{ token
             <SectionTitle icon="shield-check">Review the draft</SectionTitle>
             <p className="text-sm text-muted leading-relaxed">Fix or remove anything that doesn&apos;t reflect what you said. If you do nothing, it goes to the student automatically on <LocalTime iso={new Date(new Date(s.created_at).getTime() + REVIEW_WINDOW_MS).toISOString()} mode="date" />, marked as not reviewed.</p>
             <ReviewEditor token={token} initial={s.content} />
+          </section>
+        )}
+        {m && av && (
+          <section className="card p-5 sm:p-6 grid gap-4">
+            <SectionTitle icon="calendar">Your availability</SectionTitle>
+            <p className="text-sm text-muted leading-relaxed">
+              Pick the hours students can book you ({m.city ? `${m.city} time` : "your local time"}). {av.custom ? "These are your hours." : "Right now we show a placeholder pattern until you set yours."} Calls already booked stay as they are.
+            </p>
+            <AvailabilityEditor token={token} initial={{ weekly: av.weekly, blackout: av.blackout }} />
           </section>
         )}
         {s && s.status !== "draft" && <Callout tone="ok" icon="check-circle">The write-up has been sent to the student ({s.status === "approved" ? "approved by you" : "released automatically"}). Thank you!</Callout>}

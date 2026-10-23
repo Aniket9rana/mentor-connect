@@ -10,6 +10,10 @@ import { LocalTime } from "@/components/LocalTime";
 import { Avatar } from "@/components/Brand";
 import { Icon } from "@/components/Icon";
 import { PageHeader, SectionTitle } from "@/components/PageBits";
+import { DeleteAccount } from "@/components/DeleteAccount";
+import { nowMs } from "@/lib/clock";
+import { shortlistIds } from "@/lib/shortlist";
+import { headline } from "@/lib/mentors";
 
 export const metadata = { title: "My journey" };
 
@@ -18,6 +22,7 @@ export default async function Journey() {
   if (!student) redirect("/");
   await autoReleaseDue();
   const bookings = await studentBookings(student.id);
+  const savedMentors = (await Promise.all((await shortlistIds(student.id)).map((id) => getMentor(id)))).filter((m) => !!m);
   const summaries = await all<{ booking_id: string; content: string; status: string }>(
     "SELECT s.booking_id, s.content, s.status FROM summaries s JOIN bookings b ON b.id = s.booking_id WHERE b.student_id = ?", [student.id]);
   const sum = new Map(summaries.map((s) => [s.booking_id, { ...s, c: JSON.parse(s.content) }]));
@@ -25,7 +30,7 @@ export default async function Journey() {
   const names = new Map<string, string>();
   for (const b of bookings) names.set(b.mentor_id, (await getMentor(b.mentor_id))?.name ?? b.mentor_id);
 
-  const upcoming = bookings.filter((b) => b.status === "confirmed" && new Date(b.slot_start).getTime() > Date.now()).reverse();
+  const upcoming = bookings.filter((b) => b.status === "confirmed" && new Date(b.slot_start).getTime() > nowMs()).reverse();
   const history = bookings.filter((b) => !upcoming.includes(b) && b.status !== "cancelled");
   const open = items.filter((i) => !i.done);
   const callsDone = history.filter((b) => b.status === "completed").length;
@@ -99,6 +104,21 @@ export default async function Journey() {
           </section>
         )}
 
+        {savedMentors.length > 0 && (
+          <section className="grid gap-4">
+            <SectionTitle icon="bookmark" aside={savedMentors.length > 1 ? <Link className="underline underline-offset-2" href={`/compare?ids=${savedMentors.slice(0, 3).map((m) => m!.id).join(",")}`}>Compare {Math.min(3, savedMentors.length)}</Link> : undefined}>Saved mentors</SectionTitle>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {savedMentors.map((m) => (
+                <Link key={m!.id} href={`/mentors/${m!.id}`} className="card card-lift p-4 flex items-center gap-3 group">
+                  <Avatar name={m!.name} seed={m!.id} size={40} />
+                  <div className="min-w-0"><div className="font-semibold tracking-tight truncate">{m!.name}</div><div className="text-xs text-muted truncate">{headline(m!)}</div></div>
+                  <Icon name="chevron-right" size={16} className="ml-auto text-muted group-hover:text-fg transition-colors" />
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
+
         <section className="grid gap-4">
           <SectionTitle icon="file-text">Past calls</SectionTitle>
           {history.length === 0 && (
@@ -132,6 +152,8 @@ export default async function Journey() {
             })}
           </div>
         </section>
+
+        <DeleteAccount />
       </div>
     </div>
   );

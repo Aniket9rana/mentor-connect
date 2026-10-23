@@ -4,6 +4,8 @@ import { currentStudent } from "@/lib/session";
 import { one } from "@/lib/db";
 import { loadMessages } from "@/lib/assistant";
 import { Chat } from "@/components/Chat";
+import { shortlistIds } from "@/lib/shortlist";
+import { waitlistFor } from "@/lib/waitlist";
 import { Icon } from "@/components/Icon";
 
 export const metadata = { title: "Find a mentor" };
@@ -19,6 +21,9 @@ export default async function ChatPage({ searchParams }: { searchParams: Promise
     conversationId = (await one<{ id: string }>("SELECT c.id FROM conversations c WHERE c.student_id = ? AND EXISTS (SELECT 1 FROM messages m WHERE m.conversation_id = c.id) ORDER BY c.updated_at DESC LIMIT 1", [student.id]))?.id ?? null;
   const messages = conversationId ? await loadMessages(conversationId) : [];
 
+  const saved = await shortlistIds(student.id);
+  const waitlisted = conversationId ? await waitlistFor(student.id, conversationId) : false;
+
   return (
     <div className="relative isolate flex flex-col min-h-[calc(100dvh-4rem)]">
       <div className="aurora !opacity-60" />
@@ -30,7 +35,7 @@ export default async function ChatPage({ searchParams }: { searchParams: Promise
           </div>
           {messages.length > 0 && <Link className="btn btn-sm ml-auto" href="/chat?new=1"><Icon name="plus" size={14} /> New topic</Link>}
         </div>
-        <Chat key={conversationId ?? "new"} initial={messages} conversationId={conversationId} prefill={sp.q} />
+        <Chat key={conversationId ?? "new"} initial={messages} conversationId={conversationId} prefill={sp.q} savedIds={saved} waitlisted={waitlisted} />
       </div>
     </div>
   );

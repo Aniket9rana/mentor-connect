@@ -9,6 +9,8 @@ import { appUrl } from "@/lib/email";
 import { LocalTime } from "@/components/LocalTime";
 import { BookingActions } from "@/components/BookingActions";
 import { TranscriptForm } from "@/components/TranscriptForm";
+import { nowMs } from "@/lib/clock";
+import { BriefEditor } from "@/components/BriefEditor";
 import { Avatar } from "@/components/Brand";
 import { Icon } from "@/components/Icon";
 import { BackLink, Callout, SectionTitle } from "@/components/PageBits";
@@ -27,8 +29,8 @@ export default async function BookingPage({ params }: { params: Promise<{ id: st
   const m = await getMentor(b.mentor_id);
   const summary = await getSummary(b.id);
   const start = new Date(b.slot_start).getTime();
-  const past = start <= Date.now();
-  const canChange = b.status === "confirmed" && start - Date.now() > CANCEL_CUTOFF_MS;
+  const past = start <= nowMs();
+  const canChange = b.status === "confirmed" && start - nowMs() > CANCEL_CUTOFF_MS;
   const st = STATUS[b.status];
   const gcal = googleCalendarUrl({ start: b.slot_start, minutes: b.duration_min, title: `Mentor call: ${m?.name} (Mentor Connect)`, description: `Details: ${appUrl()}/bookings/${b.id}`, url: b.meeting_url });
   const reviewBy = summary ? new Date(new Date(summary.created_at).getTime() + REVIEW_WINDOW_MS).toISOString() : null;
@@ -91,6 +93,7 @@ export default async function BookingPage({ params }: { params: Promise<{ id: st
             <SectionTitle icon="file-text">What your mentor will see</SectionTitle>
             <p className="text-sm whitespace-pre-wrap leading-relaxed text-fg2 border-l-2 border-brand pl-4">{b.brief}</p>
             <p className="text-xs text-muted">A pre-call brief, generated from your chat using only what you said.</p>
+            {b.status === "confirmed" && !past && <BriefEditor bookingId={b.id} initial={b.brief} />}
           </section>
         )}
 

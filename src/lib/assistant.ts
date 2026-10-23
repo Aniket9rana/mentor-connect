@@ -27,6 +27,8 @@ export type ChatMessage = {
   content: string;
   kind: MsgKind;
   matchQuality?: "strong" | "partial" | "none";
+  /** What the mentor list is missing (partial/none matches only). */
+  unmet?: string;
   cards?: Card[];
   createdAt: string;
 };
@@ -34,6 +36,7 @@ export type ChatMessage = {
 type Payload = {
   kind: MsgKind;
   matchQuality?: "strong" | "partial" | "none";
+  unmet?: string;
   picks?: { mentorId: string; reason: string; gaps: string; ask: string; grounded: boolean }[];
 };
 
@@ -117,7 +120,7 @@ export async function loadMessages(conversationId: string): Promise<ChatMessage[
           });
       }
     }
-    out.push({ id: r.id, role: r.role, content: r.content, kind: p.kind, matchQuality: p.matchQuality, cards, createdAt: r.created_at });
+    out.push({ id: r.id, role: r.role, content: r.content, kind: p.kind, matchQuality: p.matchQuality, unmet: p.unmet, cards, createdAt: r.created_at });
   }
   return out;
 }
@@ -328,7 +331,7 @@ async function finishRecommendation(o: {
   });
   await run("UPDATE conversations SET topic = ?, outcome = ? WHERE id = ?", [rec.understanding.slice(0, 300), quality === "none" ? "no_match" : "recommended", ids.conversationId]);
 
-  const id = await o.reply(intro, { kind: "recommend", matchQuality: quality, picks });
+  const id = await o.reply(intro, { kind: "recommend", matchQuality: quality, unmet: quality === "strong" ? undefined : rec.unmet_need?.slice(0, 300), picks });
   const last = id.messages[id.messages.length - 1];
   for (const [i, p] of picks.entries()) {
     await run("INSERT INTO recommendations (id, conversation_id, message_id, mentor_id, rank, reason, gaps, ask, grounded, created_at) VALUES (?,?,?,?,?,?,?,?,?,?)", [

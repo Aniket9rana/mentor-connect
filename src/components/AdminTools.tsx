@@ -6,7 +6,7 @@ import { Icon } from "./Icon";
 const TOOLS = [
   { action: "load_demo", label: "Load demo data", icon: "users", hint: "Adds ~30 clearly-labelled demo students with histories so the dashboard has something to show." },
   { action: "sign_in_demo", label: "Sign in as demo student", icon: "user", hint: "Opens a student with calls, write-ups and action items." },
-  { action: "run_daily", label: "Run daily job", icon: "refresh", hint: "Releases drafts older than 48h and sends action-item nudges (what the cron does)." },
+  { action: "run_daily", label: "Run daily job", icon: "refresh", hint: "Releases drafts older than 48h, sends action-item nudges and call reminders (what the cron does)." },
   { action: "force_release", label: "Simulate 48h passing", icon: "clock", hint: "Releases every pending draft now, marked as not reviewed." },
   { action: "remove_demo", label: "Remove demo data", icon: "x", hint: "Deletes every demo student and their records." },
 ] as const;

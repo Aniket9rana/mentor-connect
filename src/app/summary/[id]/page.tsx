@@ -10,6 +10,7 @@ import { FeedbackForm } from "@/components/FeedbackForm";
 import { LocalTime } from "@/components/LocalTime";
 import { Icon } from "@/components/Icon";
 import { Avatar } from "@/components/Brand";
+import { PrintButton } from "@/components/PrintButton";
 import { BackLink, Callout, SectionTitle } from "@/components/PageBits";
 
 const SOURCE = {
@@ -37,7 +38,10 @@ export default async function SummaryPage({ params }: { params: Promise<{ id: st
     <div className="relative isolate">
       <div className="aurora !opacity-50" />
       <div className="mx-auto max-w-3xl px-4 sm:px-6 py-8 sm:py-10 grid gap-9">
-        <BackLink href="/journey">My journey</BackLink>
+        <div className="flex items-center gap-3 no-print">
+          <BackLink href="/journey">My journey</BackLink>
+          <span className="ml-auto"><PrintButton /></span>
+        </div>
 
         <header className="grid gap-5">
           <div className="flex items-center gap-3 flex-wrap">
@@ -85,7 +89,7 @@ export default async function SummaryPage({ params }: { params: Promise<{ id: st
           </section>
         )}
 
-        <section className="card-glow p-6 sm:p-7 grid gap-4" style={{ boxShadow: "var(--shadow-lg)" }}>
+        <section className="card-glow p-6 sm:p-7 grid gap-4 print-keep" style={{ boxShadow: "var(--shadow-lg)" }}>
           <div className="flex items-center gap-2.5"><span className="orb h-6 w-6" aria-hidden /><span className="label !text-accentink">What&apos;s next</span></div>
           <p className="text-lg leading-relaxed">{c.next_step.text}</p>
           <div className="flex gap-2 flex-wrap">
@@ -106,7 +110,7 @@ export default async function SummaryPage({ params }: { params: Promise<{ id: st
           </section>
         )}
 
-        <section className="card p-5 sm:p-6 grid gap-3">
+        <section className="card p-5 sm:p-6 grid gap-3 no-print">
           <div className="grid gap-0.5"><h2 className="text-base font-semibold tracking-tight">How was this call?</h2><p className="text-sm text-muted">Your rating helps Mesa pick and improve mentors.</p></div>
           <FeedbackForm bookingId={b.id} existing={fb?.rating} />
         </section>

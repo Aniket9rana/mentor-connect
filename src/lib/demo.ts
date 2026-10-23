@@ -137,7 +137,7 @@ export async function loadDemoData(): Promise<number> {
       const m = priya && k === 1 ? bestMentors[1] ?? mentor : mentor;
       let slot: number;
       if (kind === "future") {
-        const cands = candidateSlots(m).filter((c) => !takenSlots.has(`${m.id}${c}`));
+        const cands = (await candidateSlots(m)).filter((c) => !takenSlots.has(`${m.id}${c}`));
         if (!cands.length) continue;
         slot = new Date(cands[Math.min(cands.length - 1, k + 1)]).getTime();
       } else slot = Math.round((priya ? NOW - (k === 0 ? 20 : 9) * DAY : tr + (2 + Math.floor(rnd() * 3)) * DAY) / 3600_000) * 3600_000; // whole hours
